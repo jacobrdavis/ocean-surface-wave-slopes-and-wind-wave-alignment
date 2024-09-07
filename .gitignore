@@ -1,14 +1,8 @@
 # Project-specific
-dev_notes.md
-figures/
-working_figures/
 input_data/*
 !input_data/README.md
 archived_data/
-scrap_notebooks/
 *.vscode
-*.pptx
-.*afdesign
 
 # MacOS stuff
 .DS_store
