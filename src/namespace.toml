@@ -1,0 +1,414 @@
+# Define buoy variable namespace
+[buoy.vars]
+time='time'
+id='id'
+longitude='longitude'
+latitude='latitude'
+significant_height='significant_height'
+peak_period='peak_period'
+peak_direction='peak_direction'
+peak_directional_spread='peak_directional_spread'
+mean_period='mean_period'
+mean_direction='mean_direction'
+mean_directional_spread='mean_directional_spread'
+energy_density='energy_density'  #TODO: observed?
+frequency='frequency'
+energy_density_intrinsic='energy_density_intrinsic'
+frequency_intrinsic='frequency_intrinsic'
+energy_density_wn='energy_density_wn'
+wavenumber='wavenumber'
+a1='a1'
+b1='b1'
+a2='a2'
+b2='b2'
+direction='direction'  #TODO: consider renaming to wave_direction
+directional_spread='directional_spread'  #TODO: consider renaming to wave_directional_spread
+mean_square_slope_intrinsic='mean_square_slope_intrinsic'
+mean_square_slope_intrinsic_down_wind='mean_square_slope_intrinsic_down_wind'
+mean_square_slope_intrinsic_cross_wind='mean_square_slope_intrinsic_cross_wind'
+wave_check_factor='wave_check_factor'
+wind_speed='wind_speed'
+wind_direction='wind_direction'
+peak_wave_age='peak_wave_age'
+peak_wind_wave_alignment='peak_wind_wave_alignment'
+peak_wind_wave_alignment_absolute='peak_wind_wave_alignment_abs'
+peak_wind_wave_alignment_category='peak_wind_wave_alignment_cat'
+mean_wave_age='mean_wave_age'
+mean_wind_wave_alignment='mean_wind_wave_alignment'
+mean_wind_wave_alignment_absolute='mean_wind_wave_alignment_abs'
+mean_wind_wave_alignment_category='mean_wind_wave_alignment_cat'
+sea_level_pressure='sea_level_pressure'
+sea_surface_temperature='sea_surface_temperature'
+depth='depth'
+drift_speed='drift_speed'
+drift_direction='drift_direction'
+storm_longitude='storm_longitude'
+storm_latitude='storm_latitude'
+storm_heading='storm_heading'
+storm_speed='storm_speed_kt'
+storm_radius_max_wind='storm_radius_max_wind_nmi'
+storm_max_wind_speed='storm_max_wind_speed_kt'
+storm_trapping_criterion='storm_trapping_criterion'
+storm_distance='storm_distance'
+storm_back_bearing='storm_back_bearing'
+storm_distance_x='storm_distance_x'
+storm_distance_y='storm_distance_y'
+storm_quadrant='storm_quadrant'
+
+# Define model variable namespace
+[model.vars]
+time='time'
+direction='direction'
+frequency='frequency'
+frequency_direction_energy_density='frequency_direction_energy_density'
+frequency_energy_density='frequency_energy_density'
+wavenumber_energy_density='wavenumber_energy_density'
+
+# Define netCDF attributes
+[buoy.ncdf_attrs]
+
+# Empty attributes ('') are filled in automatically by the script
+global.Conventions='CF-1.11, ACDD-1.3'
+global.title='Hurricane Idalia buoy data to accompany the article "Ocean surface wave slopes and wind-wave alignment observed in Hurricane Idalia"'
+global.id='https://doi.org/10.5061/dryad.zw3r228h7'
+global.history=''  # to be automatically generated
+global.creator_name='Jacob Davis (APL-UW)'
+global.creator_email='davisjr@uw.edu'
+global.project='NOPP Coastal Hurricane Impacts (NHCI)'
+global.institution='Applied Physics Laboratory at the University of Washington (APL-UW)'
+global.source='Air-deployed wave buoy surface observations in Hurricane Idalia (2023)'
+global.license='CC0'
+global.references=''  # TODO: add later
+global.acknowledgement='This work was funded by the U.S. National Ocean Partnership Program (NOPP) as part of the NOPP Coastal Hurricane Impacts project (ONR Grant N00014-21-1-2194)'
+global.comment='See accompanying publication in "references" attribute'
+global.summary='Free-drifting wave buoy observations in Hurricane Idalia.  This dataset also includes colocated model wind speed data (COAMPS-TC), best track data (IBTrACS), and bathymetry data (GEBCO), all interpolated onto the buoy times and locations.'
+global.storm_id = 'AL102023'
+global.geospatial_lat_min='' # to be automatically generated
+global.geospatial_lat_max='' # to be automatically generated
+global.geospatial_lon_min='' # to be automatically generated
+global.geospatial_lon_max='' # to be automatically generated
+global.time_coverage_start='' # to be automatically generated
+global.time_coverage_end='' # to be automatically generated
+global.date_created='' # to be automatically generated
+global.keywords=['Earth Science > Oceans > Ocean Waves > Gravity Waves']
+global.keywords_vocabulary='GCMD Keywords'
+global.standard_name_vocabulary='CF Standard Name Table Version 85, (21 May 2024)'
+global._FillValue=''
+global.featureType='trajectory'
+
+time.standard_name='time'
+time.long_name='time'
+time.description='mean observation time within reporting interval'
+time.units='seconds since 1970-01-01T00:00:00Z'
+time.coverage_content_type='coordinate'
+
+longitude.standard_name='longitude'
+longitude.long_name='longitude'
+longitude.description='mean GPS longitude within reporting interval'
+longitude.units='degree_east'
+longitude.coverage_content_type='coordinate'
+
+latitude.standard_name='latitude'
+latitude.long_name='latitude'
+latitude.description='mean GPS latitude within reporting interval'
+latitude.units='degree_north'
+latitude.coverage_content_type='coordinate'
+
+significant_height.standard_name='sea_surface_wave_significant_height'
+significant_height.long_name='sea_surface_wave_significant_height'
+significant_height.description='significant wave height from the zeroth moment of the sea surface wave variance spectral density'
+significant_height.units='m'
+significant_height.coverage_content_type='physicalMeasurement'
+
+peak_period.standard_name='sea_surface_wave_period_at_variance_spectral_density_maximum'
+peak_period.long_name='sea_surface_wave_period_at_variance_spectral_density_maximum'
+peak_period.description='peak of sea surface wave variance spectral density'
+peak_period.units='s'
+peak_period.coverage_content_type='physicalMeasurement'
+
+peak_direction.standard_name='sea_surface_wave_from_direction_at_variance_spectral_density_maximum'
+peak_direction.long_name='sea_surface_wave_from_direction_at_variance_spectral_density_maximum'
+peak_direction.description='wave direction (coming from) calculated from normalized spectral directional moments at the spectral peak and measured positive clockwise from north'
+peak_direction.units='degree'
+peak_direction.coverage_content_type='physicalMeasurement'
+
+peak_directional_spread.standard_name='sea_surface_wave_directional_spread_at_variance_spectral_density_maximum'
+peak_directional_spread.long_name='sea_surface_wave_directional_spread_at_variance_spectral_density_maximum'
+peak_directional_spread.description='wave directional spread calculated from normalized spectral directional moments at the spectral peak'
+peak_directional_spread.units='degree'
+peak_directional_spread.coverage_content_type='physicalMeasurement'
+
+mean_period.standard_name='sea_surface_wave_mean_period_from_variance_spectral_density_first_frequency_moment'
+mean_period.long_name='sea_surface_wave_mean_period_from_variance_spectral_density_first_frequency_moment'
+mean_period.description='mean wave period calculated from the ratio of the zeroth moment and first moment of the sea surface wave variance spectral density'
+mean_period.units='s'
+mean_period.coverage_content_type='physicalMeasurement'
+
+mean_direction.standard_name='sea_surface_wave_mean_from_direction'
+mean_direction.long_name='sea_surface_wave_mean_from_direction'
+mean_direction.description='mean wave direction (coming from) calculated from normalized spectral directional moments at the centroid (mean) frequency and measured positive clockwise from north'
+mean_direction.units='degree'
+mean_direction.coverage_content_type='physicalMeasurement'
+
+mean_directional_spread.standard_name=''
+mean_directional_spread.long_name='sea_surface_mean_wave_directional_spread'
+mean_directional_spread.description='mean wave directional spread calculated from normalized spectral directional moments at the centroid (mean) frequency'
+mean_directional_spread.units='degree'
+mean_directional_spread.coverage_content_type='physicalMeasurement'
+
+energy_density_intrinsic.standard_name='sea_surface_wave_variance_spectral_density'
+energy_density_intrinsic.long_name='sea_surface_wave_variance_spectral_density'
+energy_density_intrinsic.description='wave variance spectral density as a function of frequency in the intrinsic reference frame'
+energy_density_intrinsic.units='m^2/Hz'
+energy_density_intrinsic.coverage_content_type='physicalMeasurement'
+
+frequency_intrinsic.standard_name='wave_frequency'
+frequency_intrinsic.long_name='wave_frequency'
+frequency_intrinsic.description='wave spectral frequency in the intrinsic reference frame'
+frequency_intrinsic.units='Hz'
+frequency_intrinsic.coverage_content_type='physicalMeasurement'
+
+a1.standard_name=''
+a1.long_name='a1'
+a1.description='normalized spectral directional moment (positive east)'
+a1.units='1'
+a1.coverage_content_type='physicalMeasurement'
+
+b1.standard_name=''
+b1.long_name='b1'
+b1.description='normalized spectral directional moment (positive north)'
+b1.units='1'
+b1.coverage_content_type='physicalMeasurement'
+
+a2.standard_name=''
+a2.long_name='a2'
+a2.description='normalized spectral directional moment (east-west)'
+a2.units='1'
+a2.coverage_content_type='physicalMeasurement'
+
+b2.standard_name=''
+b2.long_name='b2'
+b2.description='normalized spectral directional moment (north-south)'
+b2.units='1'
+b2.coverage_content_type='physicalMeasurement'
+
+direction.standard_name='sea_surface_wave_from_direction'
+direction.long_name='sea_surface_wave_from_direction'
+direction.description='wave direction (coming from) as a function of frequency calculated from normalized spectral directional moments and measured positive clockwise from north'
+direction.units='degree'
+direction.coverage_content_type='physicalMeasurement'
+
+# directional_spread.standard_name='sea_surface_wave_directional_spread'
+# directional_spread.long_name='sea_surface_wave_directional_spread'
+# directional_spread.description='wave directional spread as a function of frequency calculated from normalized spectral directional moments'
+# directional_spread.units='degree'
+
+mean_square_slope_intrinsic.standard_name='sea_surface_wave_mean_square_slope'
+mean_square_slope_intrinsic.long_name='sea_surface_wave_mean_square_slope'
+mean_square_slope_intrinsic.description='mean square slope in the intrinsic reference frame calculated from the fourth moment of the wave variance spectral density'
+mean_square_slope_intrinsic.units='1'
+mean_square_slope_intrinsic.coverage_content_type='physicalMeasurement'
+
+mean_square_slope_intrinsic_down_wind.standard_name='sea_surface_wave_mean_square_x_slope'
+mean_square_slope_intrinsic_down_wind.long_name='sea_surface_wave_mean_square_x_slope'
+mean_square_slope_intrinsic_down_wind.description='x-component of mean square slope in a coordinate system with the x-axis aligned with the wind direction'
+mean_square_slope_intrinsic_down_wind.units='1'
+mean_square_slope_intrinsic_down_wind.coverage_content_type='physicalMeasurement'
+
+mean_square_slope_intrinsic_cross_wind.standard_name='sea_surface_wave_mean_square_y_slope'
+mean_square_slope_intrinsic_cross_wind.long_name='sea_surface_wave_mean_square_y_slope'
+mean_square_slope_intrinsic_cross_wind.description='y-component of mean square slope in a coordinate system with the x-axis aligned with the wind direction'
+mean_square_slope_intrinsic_cross_wind.units='1'
+mean_square_slope_intrinsic_cross_wind.coverage_content_type='physicalMeasurement'
+
+wave_check_factor.standard_name=''
+wave_check_factor.long_name='wave_check_factor'
+wave_check_factor.description='ratio of vertical motion to horizontal motion at each frequency band'
+wave_check_factor.units='1'
+wave_check_factor.coverage_content_type='physicalMeasurement'
+
+wind_speed.standard_name='wind_speed'
+wind_speed.long_name='wind_speed'
+wind_speed.description='wind speed at 10-m height from COAMPS-TC'
+wind_speed.units='m/s'
+wind_speed.coverage_content_type='modelResult'
+
+wind_direction.standard_name='wind_from_direction'
+wind_direction.long_name='wind_from_direction'
+wind_direction.description='wind direction (coming from) at 10-m height from COAMPS-TC measured positive clockwise from north'
+wind_direction.units='degree'
+wind_direction.coverage_content_type='modelResult'
+
+peak_wave_age.standard_name=''
+peak_wave_age.long_name='sea_surface_wave_age_at_variance_spectral_density_maximum'
+peak_wave_age.description='ratio of wave phase speed, calculated using the period at the variance_spectral_density_maximum, to wind speed at 10-m height'
+peak_wave_age.units='1'
+peak_wave_age.coverage_content_type='physicalMeasurement'
+
+peak_wind_wave_alignment.standard_name=''
+peak_wind_wave_alignment.long_name='alignment_between_wind_direction_and_sea_surface_direction_at_variance_spectral_density_maximum'
+peak_wind_wave_alignment.description='smallest angle resulting from the signed difference of the wind direction and peak wave direction'
+peak_wind_wave_alignment.units='degree'
+peak_wind_wave_alignment.coverage_content_type='physicalMeasurement'
+
+peak_wind_wave_alignment_absolute.standard_name=''
+peak_wind_wave_alignment_absolute.long_name='absolute_alignment_between_wind_direction_and_sea_surface_direction_at_variance_spectral_density_maximum'
+peak_wind_wave_alignment_absolute.description='absolute value of the smallest angle resulting from the difference of the wind direction and peak wave direction'
+peak_wind_wave_alignment_absolute.units='degree'
+peak_wind_wave_alignment_absolute.coverage_content_type='physicalMeasurement'
+
+peak_wind_wave_alignment_category.standard_name=''
+peak_wind_wave_alignment_category.long_name='categorized_absolute_alignment_between_wind_direction_and_sea_surface_direction_at_variance_spectral_density_maximum'
+peak_wind_wave_alignment_category.description='absolute value of the smallest angle resulting from the difference of the wind direction and peak wave direction categorized by Holthuijsen et al. (2012) wind-wave alignment definitions'
+peak_wind_wave_alignment_category.units='1'
+peak_wind_wave_alignment_category.coverage_content_type='thematicClassification'
+
+mean_wave_age.standard_name=''
+mean_wave_age.long_name='sea_surface_mean_wave_age'
+mean_wave_age.description='ratio of wave phase speed, calculated at the mean period, to wind speed at 10-m height'
+mean_wave_age.units='1'
+mean_wave_age.coverage_content_type='physicalMeasurement'
+
+mean_wind_wave_alignment.standard_name=''
+mean_wind_wave_alignment.long_name='alignment_between_wind_direction_and_sea_surface_mean_wave_direction'
+mean_wind_wave_alignment.description='smallest angle resulting from the signed difference of the wind direction and mean wave direction'
+mean_wind_wave_alignment.units='degree'
+mean_wind_wave_alignment.coverage_content_type='physicalMeasurement'
+
+mean_wind_wave_alignment_absolute.standard_name=''
+mean_wind_wave_alignment_absolute.long_name='absolute_alignment_between_wind_direction_and_sea_surface_mean_wave_direction'
+mean_wind_wave_alignment_absolute.description='absolute value of the smallest angle resulting from the difference of the wind direction and mean wave direction'
+mean_wind_wave_alignment_absolute.units='degree'
+mean_wind_wave_alignment_absolute.coverage_content_type='physicalMeasurement'
+
+mean_wind_wave_alignment_category.standard_name=''
+mean_wind_wave_alignment_category.long_name='categorized_absolute_alignment_between_wind_direction_and_sea_surface_mean_wave_direction'
+mean_wind_wave_alignment_category.description='absolute value of the smallest angle resulting from the difference of the wind direction and mean wave direction categorized by Holthuijsen et al. (2012) wind-wave alignment definitions'
+mean_wind_wave_alignment_category.units='1'
+mean_wind_wave_alignment_category.coverage_content_type='thematicClassification'
+
+sea_level_pressure.standard_name='air_pressure_at_mean_sea_level'
+sea_level_pressure.long_name='air_pressure_at_mean_sea_level'
+sea_level_pressure.description='air pressure measured at buoy height (0.1 m above sea surface)'
+sea_level_pressure.units='hPa'
+sea_level_pressure.coverage_content_type='physicalMeasurement'
+
+sea_surface_temperature.standard_name='sea_surface_temperature'
+sea_surface_temperature.long_name='sea_surface_temperature'
+sea_surface_temperature.description='temperature of sea water near the surface'
+sea_surface_temperature.units='degree_C'
+sea_surface_temperature.coverage_content_type='physicalMeasurement'
+
+depth.standard_name='depth'
+depth.long_name='depth'
+depth.description='vertical distance below the water surface from the 2023 General Bathymetric Chart of the Oceans (positive down)'
+depth.units='m'
+depth.positive='down'
+depth.source='2023 General Bathymetric Chart of the Oceans (GEBCO)'
+depth.reference="""GEBCO Bathymetric Compilation Group. (2023). The GEBCO_2023 grid - a continuous terrain model of the global oceans and land. NERC EDS British Oceanographic Data Centre NOC. doi:10.5285/f98b053b-0cbc-6c23-e053-6c86abc0af7b"""
+depth.coverage_content_type='auxillaryInformation'
+
+drift_speed.standard_name='platform_speed_wrt_ground'
+drift_speed.long_name='platform_speed_wrt_ground'
+drift_speed.description='buoy drift speed'
+drift_speed.units='m/s'
+drift_speed.coverage_content_type='physicalMeasurement'
+
+drift_direction.standard_name='platform_course'
+drift_direction.long_name='platform_course'
+drift_direction.description='buoy drift direction (going to) measured clockwise from north'
+drift_direction.units='degree'
+drift_direction.coverage_content_type='physicalMeasurement'
+
+storm_longitude.standard_name=''
+storm_longitude.long_name='tropical_cyclone_longitude'
+storm_longitude.description='tropical cyclone longitude (interpolated from IBTrACS)'
+storm_longitude.units='degree_east'
+storm_longitude.source='International Best Track Archive for Climate Stewardship (IBTrACS)'
+storm_longitude.reference="""Gahtan, Jennifer; Knapp, Kenneth R.; Schreck, Carl J. III; Diamond, Howard J.; Kossin, James P.; Kruk, Michael C. (2024). International Best Track Archive for Climate Stewardship (IBTrACS) Project, Version 4.01. [last 3 years]. NOAA National Centers for Environmental Information. https://doi.org/10.25921/82ty-9e16 [January 4, 2024]."""
+storm_longitude.coverage_content_type='auxillaryInformation'
+
+storm_latitude.standard_name=''
+storm_latitude.long_name='tropical_cyclone_latitude'
+storm_latitude.description='tropical cyclone latitude (interpolated from IBTrACS)'
+storm_latitude.units='degree_north'
+storm_latitude.source='International Best Track Archive for Climate Stewardship (IBTrACS)'
+storm_latitude.reference="""Gahtan, Jennifer; Knapp, Kenneth R.; Schreck, Carl J. III; Diamond, Howard J.; Kossin, James P.; Kruk, Michael C. (2024). International Best Track Archive for Climate Stewardship (IBTrACS) Project, Version 4.01. [last 3 years]. NOAA National Centers for Environmental Information. https://doi.org/10.25921/82ty-9e16 [January 4, 2024]."""
+storm_latitude.coverage_content_type='auxillaryInformation'
+
+storm_heading.standard_name=''
+storm_heading.long_name='tropical_cyclone_course'
+storm_heading.description='tropical cyclone translation direction (going to) measured clockwise from north (interpolated from IBTrACS)'
+storm_heading.units='degree'
+storm_heading.source='International Best Track Archive for Climate Stewardship (IBTrACS)'
+storm_heading.reference="""Gahtan, Jennifer; Knapp, Kenneth R.; Schreck, Carl J. III; Diamond, Howard J.; Kossin, James P.; Kruk, Michael C. (2024). International Best Track Archive for Climate Stewardship (IBTrACS) Project, Version 4.01. [last 3 years]. NOAA National Centers for Environmental Information. https://doi.org/10.25921/82ty-9e16 [January 4, 2024]."""
+storm_heading.coverage_content_type='auxillaryInformation'
+
+storm_speed.standard_name=''
+storm_speed.long_name='tropical_cyclone_speed_wrt_ground'
+storm_speed.description='tropical cyclone translation speed (interpolated from IBTrACS)'
+storm_speed.units='knots'
+storm_speed.source='International Best Track Archive for Climate Stewardship (IBTrACS)'
+storm_speed.reference="""Gahtan, Jennifer; Knapp, Kenneth R.; Schreck, Carl J. III; Diamond, Howard J.; Kossin, James P.; Kruk, Michael C. (2024). International Best Track Archive for Climate Stewardship (IBTrACS) Project, Version 4.01. [last 3 years]. NOAA National Centers for Environmental Information. https://doi.org/10.25921/82ty-9e16 [January 4, 2024]."""
+storm_speed.coverage_content_type='auxillaryInformation'
+
+storm_radius_max_wind.standard_name='radius_of_tropical_cyclone_maximum_sustained_wind_speed'
+storm_radius_max_wind.long_name='radius_of_tropical_cyclone_maximum_sustained_wind_speed'
+storm_radius_max_wind.description='The great circle distance measured from the tropical cyclone center to the region of sustained 1-minute duration maximum wind speed (interpolated from IBTrACS)'
+storm_radius_max_wind.units='nmi'
+storm_radius_max_wind.source='International Best Track Archive for Climate Stewardship (IBTrACS)'
+storm_radius_max_wind.reference="""Gahtan, Jennifer; Knapp, Kenneth R.; Schreck, Carl J. III; Diamond, Howard J.; Kossin, James P.; Kruk, Michael C. (2024). International Best Track Archive for Climate Stewardship (IBTrACS) Project, Version 4.01. [last 3 years]. NOAA National Centers for Environmental Information. https://doi.org/10.25921/82ty-9e16 [January 4, 2024]."""
+storm_radius_max_wind.coverage_content_type='auxillaryInformation'
+
+storm_max_wind_speed.standard_name='tropical_cyclone_maximum_sustained_wind_speed'
+storm_max_wind_speed.long_name='tropical_cyclone_maximum_sustained_wind_speed'
+storm_max_wind_speed.description='sustained 1-minute duration maximum wind speed at 10-m height (interpolated from IBTrACS)'
+storm_max_wind_speed.units='knots'
+storm_max_wind_speed.source='International Best Track Archive for Climate Stewardship (IBTrACS)'
+storm_max_wind_speed.reference="""Gahtan, Jennifer; Knapp, Kenneth R.; Schreck, Carl J. III; Diamond, Howard J.; Kossin, James P.; Kruk, Michael C. (2024). International Best Track Archive for Climate Stewardship (IBTrACS) Project, Version 4.01. [last 3 years]. NOAA National Centers for Environmental Information. https://doi.org/10.25921/82ty-9e16 [January 4, 2024]."""
+storm_max_wind_speed.coverage_content_type='auxillaryInformation'
+
+storm_trapping_criterion.standard_name=''
+storm_trapping_criterion.long_name='tropical_cyclone_wave_trapping_criterion'
+storm_trapping_criterion.description='Kudryavtsev et al. (2021) criterion for wave trapping defined as the ratio of nondimensonal radius of max wind to nondimensional critical fetch length'
+storm_trapping_criterion.units='1'
+storm_trapping_criterion.reference="""Kudryavtsev, V., Yurovskaya, M., & Chapron, B. (2021). Self-Similarity of Surface Wave Developments Under Tropical Cyclones. Journal of Geophysical Research: Oceans, 126 (4), e2020JC016916. doi: 10.1029/2020JC016916881"""
+storm_trapping_criterion.coverage_content_type='auxillaryInformation'
+
+storm_distance.standard_name=''
+storm_distance.long_name='distance_to_tropical_cyclone'
+storm_distance.description='great circle distance between the tropical cyclone center and this buoy'
+storm_distance.units='km'
+storm_distance.coverage_content_type='auxillaryInformation'
+
+storm_back_bearing.standard_name=''
+storm_back_bearing.long_name='bearing_of_buoy_from_tropical_cyclone'
+storm_back_bearing.description='bearing to this buoy as seen from the tropical cyclone center, measured positive clockwise from north'
+storm_back_bearing.units='degree'
+storm_back_bearing.coverage_content_type='auxillaryInformation'
+
+storm_distance_x.standard_name=''
+storm_distance_x.long_name='x_distance_to_tropical_cyclone'
+storm_distance_x.description='x-axis distance to this buoy in a coordinate system centered on the tropical cyclone with the y-axis aligned with the direction of translation'
+storm_distance_x.units='km'
+storm_distance_x.coverage_content_type='coordinate'
+
+storm_distance_y.standard_name=''
+storm_distance_y.long_name='y_distance_to_tropical_cyclone'
+storm_distance_y.description='y-axis distance to this buoy in coordinate system centered on the tropical cyclone with the y-axis aligned with the direction of translation'
+storm_distance_y.units='km'
+storm_distance_y.coverage_content_type='coordinate'
+
+storm_quadrant.standard_name=''
+storm_quadrant.long_name='quadrant_within_tropical_cyclone'
+storm_quadrant.description='location of this buoy classified by quadrant relative to the tropical cyclone center and course'
+storm_quadrant.units='1'
+storm_quadrant.coverage_content_type='thematicClassification'
+
+
+# .standard_name=''
+# .long_name=''
+# .description=''
+# .units=''
+# .coverage_content_type=''
+
