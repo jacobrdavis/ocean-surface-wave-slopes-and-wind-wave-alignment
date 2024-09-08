@@ -12,6 +12,14 @@ At moderate wind speeds, differences in mean square slope between aligned and cr
 The dependence on wind-wave alignment is robust up to 30 m/s, but can be obscured at the highest wind speeds near the center of the storm where wind and wave directions change rapidly. 
 These changes in wave slopes may be related to the reported dependence of air-sea drag coefficients on wind-wave alignment.
 
+### Plain Language Summary
+Wave slope, or the ratio of a wave's height to its length, is explored in connection to wind and wave characteristics within Hurricane Idalia (2023).
+Slopes primarily depend on wind speed: waves steepen quickly in low-to-moderate wind conditions, but this rate of increase drops drastically at the high wind speeds found in hurricanes.
+At a given wind speed, buoy data from  Hurricane Idalia reveal a dependence of slope on the relative alignment of the wind and wave directions. 
+Slopes are elevated when the wind blows in the same direction the waves travel and are reduced when the wind blows roughly perpendicular to the waves.
+Wave slope, particularly of the shorter waves, is related to the roughness of the ocean surface, which is critical to modeling wind surface forcing (or ``drag'') in hurricanes.
+Understanding variations in slope within hurricanes thus helps to inform the prediction models used for hurricane intensity and coastal flooding forecasts. 
+
 ## Data
 
 All data are available in the Dryad repository for this publication (https://doi.org/10.5061/dryad.zw3r228h7) and in the Dryad repository for Davis et al. (2023) (https://doi.org/10.5061/dryad.g4f4qrfvb). 
