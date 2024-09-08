@@ -18,6 +18,16 @@ Input data should be saved in [input_data/](input_data/), and paths are saved in
 
 ## Structure
 
-Analysis is organized into 11 Jupyter notebooks (.ipnyb).  Notebooks are named in the order they should be run (e.g. nb0, nb1, ..., nb10).  Variables are shared between notebooks, and notebooks call prior notebooks as needed.
+Analysis is organized into 11 Jupyter notebooks (.ipynb).  Notebooks are named in the order they should be run (e.g. nb0, nb1, ..., nb10).  Variables are shared between notebooks, and notebooks call prior notebooks as needed.
 
 Most functions are organized into modules within [src/](src/).  Much of the code is from a standalone package, but it is copied here for archival purposes.
+
+## Installation
+
+1. Clone this repository.
+2. Download the data and move it to [input_data/](input_data/). (See the **Data** section above.)
+3. Create a Python environment.  If using conda, run:
+   ```sh
+   conda env create -f environment.yml
+   ```
+4. Run any of the .ipynb notebooks.
