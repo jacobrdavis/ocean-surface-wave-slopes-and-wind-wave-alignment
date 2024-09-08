@@ -24,10 +24,13 @@ Most functions are organized into modules within [src/](src/).  Much of the code
 
 ## Installation
 
-1. Clone this repository.
-2. Download the data and move it to [input_data/](input_data/). (See the **Data** section above.)
-3. Create a Python environment.  If using conda, run:
+1. Clone this repository.  In the terminal, run:
+   ```sh
+   git clone https://github.com/github_username/repo_name.git
+   ```
+3. Download the data and move it to [input_data/](input_data/). (See the **Data** section above.)
+4. Create a Python environment.  If using conda, run:
    ```sh
    conda env create -f environment.yml
    ```
-4. Run any of the .ipynb notebooks.
+5. Run any of the .ipynb notebooks.
