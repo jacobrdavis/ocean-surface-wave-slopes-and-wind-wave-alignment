@@ -1,4 +1,6 @@
-# Code for: Ocean surface wave slopes and wind-wave alignment observed in Hurricane Idalia
+# Code for:
+
+J. Davis, J. Thomson, I. Houghton, C. Fairall, B. Butterworth, E. Thompson, G. de Boer, J. Doyle, and J. Moskaitis (2024) "Ocean surface wave slopes and wind-wave alignment observed in Hurricane Idalia" submitted to JGR Oceans.
 
 ## Abstract
 
@@ -26,7 +28,7 @@ Most functions are organized into modules within [src/](src/).  Much of the code
 
 1. Clone this repository.  In the terminal, run:
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/jacobrdavis/ocean-surface-wave-slopes-and-wind-wave-alignment-observed-in-hurricane-idalia.git
    ```
 3. Download the data and move it to [input_data/](input_data/). (See the **Data** section above.)
 4. Create a Python environment.  If using conda, run:
