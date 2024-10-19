@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/849108428.svg)](https://doi.org/10.5281/zenodo.13953570)
+
 # Code for:
 
 J. Davis, J. Thomson, I. Houghton, C. Fairall, B. Butterworth, E. Thompson, G. de Boer, J. Doyle, and J. Moskaitis (2024) "Ocean surface wave slopes and wind-wave alignment observed in Hurricane Idalia" submitted to JGR Oceans.
