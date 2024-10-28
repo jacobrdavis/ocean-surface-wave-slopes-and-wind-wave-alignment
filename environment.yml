@@ -1,4 +1,4 @@
-name: ocean-surface-wave-slopes-and-wind-wave-alignment-observed-in-hurricane-idalia
+name: ocean-surface-wave-slopes-and-wind-wave-alignment
 channels:
   - conda-forge
   - defaults
