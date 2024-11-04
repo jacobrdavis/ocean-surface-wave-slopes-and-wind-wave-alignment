@@ -17,12 +17,13 @@ import pandas as pd
 import xarray as xr
 from pandas.api.typing import DataFrameGroupBy
 
-from src import utilities, kinematics, waves, list_helpers
+from . import namespace
+from src import kinematics, waves, list_helpers
 
 
 # DataFrame columns (and indexes) are defined in namespace.toml.
-namespace = utilities.get_namespace()
-var_namespace = utilities.get_var_namespace()
+namespace_dict = namespace.get_namespace()
+var_namespace = namespace.get_var_namespace()
 
 
 @pd.api.extensions.register_dataframe_accessor("buoy")
@@ -175,7 +176,7 @@ class BuoyDataFrameAccessor:
         # Get variable namespace and netCDF attributes from namespace.toml.
         var_namespace_dict = self._vars.__dict__
         # TODO: get ncdf attrs?
-        ncdf_attrs = namespace['buoy'][ncdf_attrs_key]
+        ncdf_attrs = namespace_dict['buoy'][ncdf_attrs_key]
 
         # Intersect variable namespace keys with the netCDF attribute keys.
         ncdf_var_keys = list_helpers.list_intersection(
