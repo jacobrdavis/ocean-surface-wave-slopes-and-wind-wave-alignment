@@ -1,5 +1,7 @@
 # Project-specific
 input_data/*
+cached_data/*
+archived_data/*
 !input_data/README.md
 archived_data/
 *.vscode

@@ -696,8 +696,9 @@ def plot_coamps_field_storm_frame(
     x = coamps_ds['x'].values
     y = coamps_ds['y'].values
     field = coamps_ds[field_name].values
-    X, Y = np.meshgrid(x, y)
-    return ax.pcolormesh(X, Y, field, **kwargs)
+    if x.ndim == 1 and y.ndim == 1:
+        x, y = np.meshgrid(x, y)
+    return ax.pcolormesh(x, y, field, **kwargs)
 
 
 def update_coamps_field(
