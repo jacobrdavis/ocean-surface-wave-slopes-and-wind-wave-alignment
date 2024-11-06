@@ -29,6 +29,8 @@ def percent_difference(a, b):
     mean = (a + b) / 2
     return 100 * abs_difference / mean
 
+def percent_increase(a, b):
+    return 100 * (b - a) / a
 
 def parameter_confidence_intervals(popt, pcov, n, alpha=0.05):
     """ Approximate parameter confidence intervals. """

@@ -294,7 +294,7 @@ class BuoyDataFrameAccessor:
             )
         else:
             wavenumber = self._obj.apply(
-                lambda df: waves.deep_water_dispersion(
+                lambda df: waves.deep_water_inverse_dispersion(
                     df[frequency_col],
                     **kwargs,
                 ),

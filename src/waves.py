@@ -2,7 +2,7 @@
 Water wave functions.
 """
 
-
+import warnings
 from typing import Tuple, Optional, Union
 
 import numpy as np
@@ -66,8 +66,11 @@ def mean_square_slope(
 
 def wavenumber_mean_square_slope(
     energy_density_wn: np.ndarray,
-    wavenumber: np.ndarray
-) -> np.ndarray:
+    wavenumber: np.ndarray,
+    min_wavenumber: Optional[float] = None,
+    max_wavenumber: Optional[float] = None,
+) -> Union[float, np.ndarray]:
+
     """
     Calculate mean square slope as the second moment of the one-dimensional
     wavenumber spectrum.
@@ -80,12 +83,30 @@ def wavenumber_mean_square_slope(
         energy_density_wn (np.ndarray): 1-D energy density wavenumber spectrum
             with shape (k,) or (..., k).
         wavenumber (np.ndarray): 1-D wavenumbers with shape (k,).
+        min_wavenumber (float, optional): lower wavenumber bound.
+        max_wavenumber (float, optional): upper wavenumber bound.
 
     Returns:
     Mean square slope as a
         float: if the shape of `energy_density` is (k,).
         np.ndarray: if the shape of `energy_density` is (..., k).
     """
+    energy_density_wn = np.asarray(energy_density_wn)
+    wavenumber = np.asarray(wavenumber)
+
+    if min_wavenumber is None:
+        min_wavenumber = wavenumber.min()
+
+    if max_wavenumber is None:
+        max_wavenumber = wavenumber.max()
+
+    # Mask wavenumbers outside of the specified range.
+    wavenumber_mask = np.logical_and(wavenumber >= min_wavenumber,
+                                     wavenumber <= max_wavenumber)
+    wavenumber = wavenumber[wavenumber_mask]
+    energy_density_wn = energy_density_wn[..., wavenumber_mask]
+
+    # Calculate the second moment of the energy density wavenumber spectrum.
     return np.trapz(y=energy_density_wn * wavenumber**2, x=wavenumber, axis=-1)
 
 
@@ -405,9 +426,16 @@ def fq_energy_to_wn_energy(
     var_match = check_spectral_variance(energy_density_wn, wavenumber,
                                         energy_density_fq, frequency,
                                         rtol=var_rtol)
-    if not var_match:
-        raise ValueError('Variance mismatch')
-        #TODO: should replace with NaN here
+
+    not_var_match = np.logical_not(var_match)
+    if np.any(not_var_match):
+        energy_density_wn[not_var_match, :] = np.full_like(wavenumber, np.nan)
+        n_mismatches = not_var_match.sum()
+        warnings.warn(
+            f'There are {n_mismatches} entries with a variance mismatch. '
+            f'Filling mismatched entries with NaN.',
+            category=RuntimeWarning,
+        )
     return energy_density_wn, wavenumber
 
 
@@ -417,7 +445,7 @@ def check_spectral_variance(
     energy_density_fq: np.ndarray,
     frequency: np.ndarray,
     **kwargs
-) -> bool:
+) -> Union[bool, np.ndarray]:
     """Check for variance equality between wavenumber and frequency spectra.
 
     Note: Tolerances are specified using the absolute (atol) and relative
@@ -611,16 +639,19 @@ def _dispersion_with_limits(frequency, depth):
     """
     # Initialize wavenumber array and assign values according to limits.
     wavenumber = np.empty(frequency.shape)
-    wavenumber_shallow = shallow_water_dispersion(frequency, depth)
-    wavenumber_deep = deep_water_dispersion(frequency)
+    wavenumber_shallow = shallow_water_inverse_dispersion(frequency, depth)
+    wavenumber_deep = deep_water_inverse_dispersion(frequency)
 
     # These are commonly used limits, but they are still approximations.
     in_deep = wavenumber_deep * depth > np.pi
     in_shallow = wavenumber_shallow * depth < np.pi/10
     in_intermd = np.logical_and(~in_deep, ~in_shallow)
 
-    wavenumber_intermd = _dispersion_solver(frequency[in_intermd],
-                                            depth[in_intermd])
+    if np.any(in_intermd):
+        wavenumber_intermd = _dispersion_solver(frequency[in_intermd],
+                                                depth[in_intermd])
+    else:
+        wavenumber_intermd = np.empty(frequency[in_intermd].shape)
 
     wavenumber[in_deep] = wavenumber_deep[in_deep]
     wavenumber[in_shallow] = wavenumber_shallow[in_shallow]
@@ -629,7 +660,7 @@ def _dispersion_with_limits(frequency, depth):
     return wavenumber
 
 
-def deep_water_dispersion(frequency):
+def deep_water_inverse_dispersion(frequency):
     """Computes wavenumber from the deep water linear dispersion relationship.
 
     Given frequencies (in Hz) solve the linear dispersion relationship in the
@@ -649,7 +680,7 @@ def deep_water_dispersion(frequency):
     return angular_frequency**2 / GRAVITY
 
 
-def shallow_water_dispersion(frequency, depth):
+def shallow_water_inverse_dispersion(frequency, depth):
     """Computes wavenumber from shallow water linear dispersion.
 
     Given frequencies (in Hz) solve the linear dispersion relationship in the
@@ -691,7 +722,7 @@ def _dispersion_solver(frequency: np.ndarray, depth: np.ndarray) -> np.ndarray:
 
     angular_frequency = frequency_to_angular_frequency(frequency)
 
-    wavenumber_deep = deep_water_dispersion(frequency)
+    wavenumber_deep = deep_water_inverse_dispersion(frequency)
 
     wavenumber = newton(func=_dispersion_root,
                         x0=wavenumber_deep,
@@ -723,8 +754,8 @@ def group_to_phase_ratio(
     Note: to prevent overflows in `np.sinh`, the product of wavenumber and
     depth (relative depth) are used to assign ratios at deep or shallow limits:
 
-        shallow:  Cg = 1.0 if kh < np.pi/10 (h < L/20)
-           deep:  Cg = 0.5 if kh > np.pi    (h > L/2)
+        shallow:  Cg/Cp = 1.0 if kh < np.pi/10 (h < L/20)
+           deep:  Cg/Cp = 0.5 if kh > np.pi    (h > L/2)
 
     Args:
         wavenumber (np.ndarray): 1-D wavenumbers with shape (k,).
