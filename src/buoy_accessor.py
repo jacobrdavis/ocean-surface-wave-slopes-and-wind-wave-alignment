@@ -21,9 +21,9 @@ from . import namespace
 from src import kinematics, waves, list_helpers
 
 
-# DataFrame columns (and indexes) are defined in namespace.toml.
-namespace_dict = namespace.get_namespace()
-var_namespace = namespace.get_var_namespace()
+# Import a SimpleNamespace from namespace.toml which maps DataFrame columns
+# (and indexes) to the static names used in this module.
+var_namespace = namespace.get_var_namespace(subset='vars')
 
 
 @pd.api.extensions.register_dataframe_accessor("buoy")
@@ -31,11 +31,17 @@ class BuoyDataFrameAccessor:
     def __init__(self, pandas_obj):
         self._obj = pandas_obj
         self._vars = var_namespace
+        self._ncdf_attrs = None
 
     @property
     def vars(self) -> SimpleNamespace:
         """ Return a SimpleNamespace with this DataFrame's variable names. """
         return self._vars
+
+    @property
+    def ncdf_attrs(self) -> SimpleNamespace:
+        """ Return a SimpleNamespace of netCDF attributes. """
+        return namespace.get_var_namespace(subset='ncdf_attrs')
 
     @property
     def spectral_variables(self) -> List:
@@ -53,6 +59,12 @@ class BuoyDataFrameAccessor:
         """ Return a DataFrame of sizes for each element in the DataFrame. """
         # Apply np.size element-wise to generate a DataFrame of sizes
         return self._obj.map(np.size, na_action='ignore')
+
+    def _get_all_variables(self) -> List:
+        """ Return a list of all index and column names. """
+        index_names = list(self._obj.index.names)
+        column_names = list(self._obj.columns)
+        return index_names + column_names
 
     def _get_spectral_variables(
         self,
@@ -119,11 +131,11 @@ class BuoyDataFrameAccessor:
 
         return drifter_ds
 
+    # TODO: move to its own .py file?
     def to_netcdf(
         self,
         buoy_id: str,
         path: Optional[str] = None,
-        ncdf_attrs_key: str = 'ncdf_attrs',
         float_fill_value: float = np.nan,
         frequency_col: Optional[str] = None,
         time_col: Optional[str] = None,
@@ -140,7 +152,10 @@ class BuoyDataFrameAccessor:
 
         Note:
             Only variables with attributes in `ncdf_attrs` are included. The
-            DataFrame should NOT be multiindexed for compliance with the
+            attributes are defined in the namespace.toml and are keyed by the
+            DataFrame's actual column and index names (which may not be the
+            same as the variables defined in the `vars` namespace).
+            The DataFrame should NOT be multiindexed for compliance with the
             "single trajectory" CF conventions. Remaining kwargs are passed to
             xarray.to_netcdf().
 
@@ -152,9 +167,6 @@ class BuoyDataFrameAccessor:
                 DataFrame is multiindexed by id, this should be a valid index.
             path (Optional[str], optional): NetCDF path (including '.nc').
                 If path is None, the Dataset is not saved. Defaults to None.
-            ncdf_attrs_key (str, optional): TOML namespace key
-                containing a dictionary of netCDF attributes.  This should be a
-                subtable of 'buoy'.  Defaults to 'ncdf_attrs'.
             float_fill_value (float, optional): Null data fill value to use in
                 float arrays. Defaults to np.nan.
             frequency_col (Optional[str], optional): DataFrame column name
@@ -173,21 +185,19 @@ class BuoyDataFrameAccessor:
         if time_col is None:
             time_col = self.vars.time
 
-        # Get variable namespace and netCDF attributes from namespace.toml.
-        var_namespace_dict = self._vars.__dict__
-        # TODO: get ncdf attrs?
-        ncdf_attrs = namespace_dict['buoy'][ncdf_attrs_key]
+        # Get DataFrame variables and netCDF attributes from namespace.toml.
+        var_list = self._get_all_variables()
+        ncdf_attrs_dict = self.ncdf_attrs.__dict__
 
-        # Intersect variable namespace keys with the netCDF attribute keys.
-        ncdf_var_keys = list_helpers.list_intersection(
-            list_a=list(var_namespace_dict.keys()),
-            list_b=list(ncdf_attrs.keys())
+        # Intersect variables with the netCDF attribute keys.
+        vars_with_attrs = list_helpers.list_intersection(
+            list_a=var_list,
+            list_b=list(ncdf_attrs_dict.keys())
         )
 
         # Export variables that have netCDF attributes (excluding the indexes).
-        vars_to_export = [var_namespace_dict[key] for key in ncdf_var_keys]
         vars_to_export = list_helpers.list_difference(
-            list_a=vars_to_export,
+            list_a=vars_with_attrs,
             list_b=list(self._obj.index.names)
         )
 
@@ -206,11 +216,8 @@ class BuoyDataFrameAccessor:
                                    set_datetime_index=False))
 
         # Assign netCDF attributes.
-        for var_key, var_name in var_namespace_dict.items():
-            if var_key in ncdf_attrs.keys():
-                ncdf_ds[var_name].attrs = ncdf_attrs[var_key]
-            else:
-                pass
+        for var_name in vars_with_attrs:
+            ncdf_ds[var_name].attrs = ncdf_attrs_dict[var_name]
 
         # Assign the fill value to all float variables.
         float_vars = [var for var, dtype in ncdf_ds.dtypes.items() if np.issubdtype(dtype, np.floating)]
@@ -229,7 +236,7 @@ class BuoyDataFrameAccessor:
                            combine_attrs='no_conflicts')
 
         # Add user-defined global attributes
-        ncdf_ds.attrs = ncdf_attrs['global']
+        ncdf_ds.attrs = ncdf_attrs_dict['global']
 
         # Add global CF attributes.
         current_iso_time_str = pd.Timestamp.now().isoformat(timespec='seconds')
@@ -250,7 +257,6 @@ class BuoyDataFrameAccessor:
             ncdf_ds.to_netcdf(path, **kwargs)
 
         return ncdf_ds
-
 
     def bin_by(
         self,
@@ -294,7 +300,7 @@ class BuoyDataFrameAccessor:
             )
         else:
             wavenumber = self._obj.apply(
-                lambda df: waves.deep_water_dispersion(
+                lambda df: waves.deep_water_inverse_dispersion(
                     df[frequency_col],
                     **kwargs,
                 ),
