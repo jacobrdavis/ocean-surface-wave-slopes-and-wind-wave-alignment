@@ -131,14 +131,14 @@ mean_directional_spread.description='mean wave directional spread calculated fro
 mean_directional_spread.units='degree'
 mean_directional_spread.coverage_content_type='physicalMeasurement'
 
-energy_density_intrinsic_wn.standard_name='sea_surface_wave_variance_spectral_density'
+energy_density_intrinsic_wn.standard_name=''
 energy_density_intrinsic_wn.long_name='sea_surface_wave_variance_spectral_density_wavenumber'
 energy_density_intrinsic_wn.description='wave variance spectral density as a function of wavenumber calculated from wave variance spectral density as a function of wavenumber in the intrinsic reference frame using the linear dispersion relation'
 energy_density_intrinsic_wn.units='m^2/(rad/m)'
 energy_density_intrinsic_wn.coverage_content_type='physicalMeasurement'
 
 energy_density_intrinsic.standard_name='sea_surface_wave_variance_spectral_density'
-energy_density_intrinsic.long_name='sea_surface_wave_variance_spectral_density'
+energy_density_intrinsic.long_name='sea_surface_wave_variance_spectral_density_frequency'
 energy_density_intrinsic.description='wave variance spectral density as a function of frequency in the intrinsic reference frame'
 energy_density_intrinsic.units='m^2/Hz'
 energy_density_intrinsic.coverage_content_type='physicalMeasurement'
