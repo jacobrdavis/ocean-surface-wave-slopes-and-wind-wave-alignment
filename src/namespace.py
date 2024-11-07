@@ -4,11 +4,12 @@ user-defined variable names to the static variable names used in the src code.
 """
 
 import types
+from typing import Optional
 
 import toml
 
 
-def get_namespace():
+def get_namespace() -> dict:
     """ Load the namespace file. """
     with open('./src/namespace.toml', 'r') as f:
         config = toml.load(f)
@@ -16,7 +17,7 @@ def get_namespace():
     return config
 
 
-def get_var_namespace(key='buoy', subset=None) -> types.SimpleNamespace:
+def get_var_namespace(key='buoy', subset: Optional[str] = None) -> types.SimpleNamespace:
     """ Return SimpleNamespace from the `key` table of the namespace file. """
     if subset is None:
         subset = 'vars'
