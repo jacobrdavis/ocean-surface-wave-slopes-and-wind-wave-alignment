@@ -88,6 +88,11 @@ depth_plot_kwargs = {
     'cmap': cmocean.cm.deep,
     'norm': mpl.colors.Normalize(vmin=10, vmax=40)
 }
+relative_depth_plot_kwargs = {
+    'cmap': cmocean.cm.deep,
+    # 'norm': mpl.colors.LogNorm(vmin=np.pi/10, vmax=np.pi)
+    'norm': mpl.colors.Normalize(vmin=np.pi/10, vmax=np.pi)
+}
 bathy_plot_kwargs = {
     'cmap': cmocean.tools.crop_by_percent(cmocean.cm.deep_r, 25, which='min', N=None),
     'norm': mpl.colors.Normalize(vmin=-100, vmax=0),

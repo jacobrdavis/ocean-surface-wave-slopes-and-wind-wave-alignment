@@ -290,14 +290,24 @@ class BuoyDataFrameAccessor:
         # If depth data is present, use the full relationship. Otherwise, only
         # the deep water relationship can be used.
         if depth_col in self._obj.columns:
-            wavenumber = self._obj.apply(
-                lambda df: waves.inverse_dispersion(
-                    df[frequency_col],
-                    np.array([df[depth_col]]),
-                    **kwargs
-                ),
-                axis=1,
-            )
+            # If scalar, apply is not needed.
+            if self._obj[frequency_col].buoy.is_scalar() \
+               and self._obj[depth_col].buoy.is_scalar():
+                wavenumber = waves.inverse_dispersion(
+                        self._obj[frequency_col],
+                        self._obj[depth_col],
+                        **kwargs
+                    )
+            # If rows contain frequency arrays, apply to each row.
+            else:
+                wavenumber = self._obj.apply(
+                    lambda df: waves.inverse_dispersion_array(
+                        df[frequency_col],
+                        np.array([df[depth_col]]),
+                        **kwargs
+                    ),
+                    axis=1,
+                )
         else:
             wavenumber = self._obj.apply(
                 lambda df: waves.deep_water_inverse_dispersion(
@@ -634,6 +644,16 @@ class BuoySeriesAccessor:
     def __init__(self, pandas_obj):
         self._obj = pandas_obj
 
+    def _get_element_sizes(self) -> pd.DataFrame:
+        """ Return a DataFrame of sizes for each element in the DataFrame. """
+        # Apply np.size element-wise to generate a Series of sizes
+        return self._obj.map(np.size, na_action='ignore')
+
+    def is_scalar(self) -> bool:
+        """ Return True if all elements are scalars. """
+        size_series = self._get_element_sizes()
+        return np.all(size_series == 1).astype(bool)
+
     def stacked_mean(self, axis=0) -> np.ndarray:
         """ Stack rows and return the mean along an axis. """
         return np.nanmean(np.stack(self._obj.values), axis=axis)
@@ -645,3 +665,9 @@ def _datetimeindex_to_posix(datetimeindex: pd.DatetimeIndex) -> pd.Index:
     1-Jan-1970 UTC).
     """
     return datetimeindex.astype(np.int64) // 10 ** 9
+
+
+
+
+
+
