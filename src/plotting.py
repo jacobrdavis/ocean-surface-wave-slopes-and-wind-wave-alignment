@@ -94,8 +94,13 @@ relative_depth_plot_kwargs = {
     'norm': mpl.colors.Normalize(vmin=np.pi/10, vmax=np.pi)
 }
 bathy_plot_kwargs = {
-    'cmap': cmocean.tools.crop_by_percent(cmocean.cm.deep_r, 25, which='min', N=None),
+    # 'cmap': cmocean.tools.crop_by_percent(cmocean.cm.deep_r, 25, which='min', N=None),
+    # 'cmap': colorcet.cm.blues_r,
+    # 'cmap': truncate_colormap(colorcet.cm.blues_r, maxval=0.8),
+    'cmap': truncate_colormap(mpl.cm.Blues_r, minval=0.05, maxval=0.75),
+    # 'cmap': truncate_colormap(colorcet.cm.kbc, 0.25),
     'norm': mpl.colors.Normalize(vmin=-100, vmax=0),
+    # 'norm': mpl.colors.Normalize(vmin=-50, vmax=0),
     'extend': 'min',
 }
 drift_speed_plot_kwargs = {
@@ -479,6 +484,18 @@ def update_drifter_track(
     return plot
 
 
+def plot_drifter_track_line(
+    drifter_df: pd.DataFrame,
+    ax: GeoAxes,
+    **kwargs,
+) -> PathCollection:
+    """ Plot drifter track on a map. """
+    plot = ax.plot(drifter_df['longitude'],
+                   drifter_df['latitude'],
+                   **kwargs)
+    return plot
+
+
 def plot_drifter_storm_frame(
     drifter_df: pd.DataFrame,
     ax: Axes,
@@ -568,6 +585,7 @@ default_gridline_kwargs = dict(
     x_inline=False,
     y_inline=False,
     zorder=1,
+    alpha=0.25,
     xlabel_style={'size': small_font_size},
     ylabel_style={'size': small_font_size},
 )
@@ -591,15 +609,7 @@ def plot_base_chart(
     # Initialize the figure, crop it based on extent, and add gridlines
     ax.set_extent(extent)
     ax.set_aspect('equal')
-    gridlines = ax.gridlines(
-        draw_labels=True,
-        dms=False,
-        x_inline=False,
-        y_inline=False,
-        zorder=1,
-        xlabel_style = {'size': small_font_size},
-        ylabel_style = {'size': small_font_size},
-    )
+    gridlines = ax.gridlines(**gridline_kwargs)
     gridlines.top_labels = False
     gridlines.left_labels = False
     gridlines.right_labels = True
@@ -723,8 +733,11 @@ def update_coamps_field(
 # Bathymetry plotting
 bathy_contour_kwargs = {
     'linestyles': '-',
-    'linewidths': 1,
-    'colors': 'none',
+    # 'linewidths': 1,
+    'linewidths': 0.25,
+    'alpha':0.5,
+    # 'colors': 'none',
+    'colors': 'grey',
 }
 
 
@@ -752,6 +765,7 @@ def plot_bathymetry_contours(
     label_locations,
     angle,
     ax: GeoAxes,
+    fontsize=small_font_size,
     **kwargs,
 ) -> Tuple[QuadContourSet, ContourSet]:
     """ Plot bathymetry contours on a map. """
@@ -763,19 +777,30 @@ def plot_bathymetry_contours(
         **kwargs,
     )
 
+    def fmt_level_labels(level):
+        level_abs = abs(level)
+        label = f"{level_abs:.0f}"
+        max_level_abs = max(np.abs(label_levels))
+        if level_abs >= max_level_abs:
+            return rf"{label}+ m"
+        else:
+            return rf"{label} m"
+
     contour_labels = ax.clabel(
         bathy_contours,
-        fmt='%2.1f',
         colors='k',
-        fontsize=10,
+        fontsize=fontsize,
         levels=label_levels,
         manual=label_locations,
+        fmt=fmt_level_labels,
     )
 
     for l in contour_labels:
         l.set_rotation(angle)
 
     return bathy_contours, contour_labels
+
+
 
 
 # Best track plotting
