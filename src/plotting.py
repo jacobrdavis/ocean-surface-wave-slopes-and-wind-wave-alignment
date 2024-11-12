@@ -915,3 +915,20 @@ def plot_image(
         **annotation_bbox_kwargs,
     )
     ax.add_artist(annotation)
+
+
+def hist_log(x, n_bins=10, ax=None, **kwargs):
+    """ Plot a histogram with log-spaced bins.
+    See:
+    https://stackoverflow.com/questions/47850202/plotting-a-histogram-
+    on-a-log-scale-with-matplotlib
+    """
+    if ax is None:
+        ax = plt.gca()
+    _, bins = np.histogram(x, bins=n_bins)
+    bins_log = np.logspace(np.log10(bins[0]), np.log10(bins[-1]), len(bins))
+    ax.hist(
+        x,
+        bins=bins_log,
+        **kwargs,
+    )
