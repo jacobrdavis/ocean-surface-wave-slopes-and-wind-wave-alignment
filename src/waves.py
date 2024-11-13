@@ -542,11 +542,51 @@ def phase_velocity(
 
 
 def inverse_dispersion(
+    frequency: Union[float, np.ndarray],
+    depth: Union[float, np.ndarray],
+    use_limits: bool = False
+) -> Union[float, np.ndarray]:
+    """Solve the linear dispersion relationship for wavenumber.
+
+    Given frequencies (in Hz) and water depths, solve the linear
+    dispersion relationship for the corresponding wavenumbers, k. Uses a
+    Newton-Rhapson root-finding implementation.
+
+    Note:
+        Expects inputs of matching shapes. The input `frequency` is the
+        frequency in Hz and NOT the angular frequency, omega or w.
+
+        `use_limits` might provide speed-up for very large f*d.
+
+    Args:
+        frequency (float or np.ndarray): containing frequencies
+            in [Hz]. NOT the angular frequency, omega or w.
+        depth (float or np.ndarray): water depths with shape matching
+            that of `frequency`.
+        use_limits (bool, optional): solve the dispersion relation only where
+            kh is outside of the deep and shallow water limits.
+
+    Raises:
+        ValueError: if `frequency` and `depth` are not of size (d,f) or of size
+            (f,) and (d,), respectively.
+
+    Returns:
+        np.ndarray: of shape (d,f) containing wavenumbers.
+    """
+    if use_limits:
+        wavenumber = _dispersion_with_limits(frequency, depth)
+    else:
+        wavenumber = _dispersion_solver(frequency, depth)
+    return wavenumber
+
+
+def inverse_dispersion_array(
     frequency: np.ndarray,
     depth: np.ndarray,
     use_limits: bool = False
 ) -> np.ndarray:
-    """Solve the linear dispersion relationship for the wavenumber.
+    """Solve the linear dispersion relationship for wavenumber based on
+    an array of frequencies.
 
     Given frequencies (in Hz) and water depths, solve the linear dispersion
     relationship for the corresponding wavenumbers, k. Uses a Newton-Rhapson
@@ -613,7 +653,10 @@ def inverse_dispersion(
     return wavenumber
 
 
-def _dispersion_with_limits(frequency, depth):
+def _dispersion_with_limits(
+    frequency: Union[float, np.ndarray],
+    depth: Union[float, np.ndarray],
+) -> Union[float, np.ndarray]:
     """ Solve the dispersion relation only where parameters are outside of the
     deep and shallow water limits.
 
@@ -631,11 +674,11 @@ def _dispersion_with_limits(frequency, depth):
     approximate.
 
     Args:
-        frequency (np.ndarray): of shape (d,f) containing frequencies in [Hz].
-        depth (np.ndarray): of shape (d,f) containing water depths.
+        frequency (float or np.ndarray): frequencies in [Hz]
+        depth (float or np.ndarray): water depths
 
     Returns:
-        np.ndarray: of shape (d,f) containing wavenumbers.
+       float or np.ndarray: wavenumbers with shape matching input
     """
     # Initialize wavenumber array and assign values according to limits.
     wavenumber = np.empty(frequency.shape)
@@ -670,11 +713,11 @@ def deep_water_inverse_dispersion(frequency):
     kh > np.pi (h > L/2).
 
     Args:
-        frequency (np.ndarray): of any shape containing frequencies
+        frequency (float or np.ndarray): of any shape containing frequencies
             in [Hz]. NOT the angular frequency, omega or w.
 
     Returns:
-        np.ndarray: (of shape equal to the input shape) containing wavenumbers.
+       float or np.ndarray: wavenumbers with shape matching input
     """
     angular_frequency = frequency_to_angular_frequency(frequency)
     return angular_frequency**2 / GRAVITY
@@ -690,34 +733,40 @@ def shallow_water_inverse_dispersion(frequency, depth):
     kh < np.pi/10 (h < L/20).
 
     Args:
-        frequency (np.ndarray): of shape (d,f) containing frequencies in [Hz].
-            NOT the angular frequency, omega or w.
-        depth (np.ndarray): of shape (d,f) containing water depths.
+        frequency (float or np.ndarray): containing frequencies
+            in [Hz]. NOT the angular frequency, omega or w.
+        depth (float or np.ndarray): water depths with shape matching
+            that of `frequency`.
 
     Returns:
-        np.ndarray: of shape (d,f) containing wavenumbers.
+       float or np.ndarray: wavenumbers with shape matching input
     """
     angular_frequency = frequency_to_angular_frequency(frequency)
     return angular_frequency / np.sqrt(GRAVITY * depth)
 
 
-def _dispersion_solver(frequency: np.ndarray, depth: np.ndarray) -> np.ndarray:
+def _dispersion_solver(
+    frequency: Union[float, np.ndarray],
+    depth: Union[float, np.ndarray],
+) -> Union[float, np.ndarray]:
     """Solve the linear dispersion relationship.
 
     Solves the linear dispersion relationship w^2 = gk tanh(kh) using a
     Scipy Newton-Raphson root-finding implementation.
 
     Note:
-        Expects input as numpy.ndarrays of shape (d,f) where f is the number
-        of frequencies and d is the number of depths. The input `frequency` is
-        the frequency in Hz and NOT the angular frequency, omega or w.
+        Expects input as a floats or ndarrays with matching shapes. The
+        input `frequency` is the frequency in Hz and NOT the angular
+        frequency, omega or w.
 
     Args:
-        frequency (np.ndarray): of shape (d,f) containing frequencies in [Hz].
-        depth (np.ndarray): of shape (d,f) containing water depths.
+        frequency (float or np.ndarray): containing frequencies
+            in [Hz]. NOT the angular frequency, omega or w.
+        depth (float or np.ndarray): water depths with shape matching
+            that of `frequency`.
 
     Returns:
-        np.ndarray: of shape (d,f) containing wavenumbers.
+       float or np.ndarray: wavenumbers with shape matching input
     """
 
     angular_frequency = frequency_to_angular_frequency(frequency)
