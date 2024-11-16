@@ -1,5 +1,5 @@
 """
-Utilities for handling namespace files.
+Utilities for handling time, unit conversions, and basic I/O.
 """
 
 import pickle
@@ -20,6 +20,26 @@ def strip_time_slice_tz(time_slice):
     start_slice = time_slice.start.tz_localize(None)
     stop_slice = time_slice.stop.tz_localize(None)
     return slice(start_slice, stop_slice)
+
+
+def knots_to_mps(knots):
+    """ Convert knots to meters per second. """
+    return knots / 1.944
+
+
+def nmi_to_m(nmi):
+    """ Convert nautical miles to meters. """
+    return nmi * 1852
+
+
+def nmi_to_km(nmi):
+    """ Convert nautical miles to kilometers. """
+    return nmi * 1.852
+
+
+def km_to_m(km):
+    """ Convert kilometers to meters. """
+    return km * 1000
 
 
 def read_pickle(path: str) -> Any:

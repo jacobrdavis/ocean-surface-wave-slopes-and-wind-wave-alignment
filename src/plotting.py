@@ -26,6 +26,7 @@ from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from matplotlib.patches import FancyArrow, Arc
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
+from src import utilities
 
 # Default drifter colors and labels
 default_drifter_colors = {
@@ -533,7 +534,7 @@ def plot_drifter_storm_frame(
 
     if normalize_by_rmw:
         rmw_nmi = drifter_df_plot['storm_radius_max_wind_nmi']
-        rmw_km = rmw_nmi * 1.852
+        rmw_km = utilities.nmi_to_km(rmw_nmi)
         storm_distance_x = storm_distance_x / rmw_km
         storm_distance_y = storm_distance_y / rmw_km
 
