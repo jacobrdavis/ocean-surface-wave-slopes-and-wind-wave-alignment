@@ -1,6 +1,8 @@
 """
-Functions for reading flight-level meterological datasets from NOAA and
-the United States Air Force Reserve (USAFR) Weather Reconnaissance Squadron.
+Functions for reading meteorological datasets.  This includes
+flight-level meteorological datasets from NOAA and the United States Air
+Force Reserve (USAFR) Weather Reconnaissance Squadron as well as
+National Data Buoy Center (NDBC) standard meteorological data.
 """
 
 __all__ = [
@@ -8,6 +10,7 @@ __all__ = [
     "read_usafr_met_file",
     "read_noaa_met_directory",
     "read_noaa_met_file",
+    "read_ndbc_met_file",
 ]
 
 import glob
@@ -18,6 +21,7 @@ from typing import List, Literal, Callable, Tuple, Union
 import numpy as np
 import pandas as pd
 import xarray as xr
+from xarray.core.variable import MissingDimensionsError
 
 # Retrieved Oct 2024 from: https://www.aoml.noaa.gov/hrd/format/usaf.html
 USAFR_VAR_ATTRS = {
@@ -276,6 +280,71 @@ def read_noaa_met_file(
     return met_ds
 
 
+def read_ndbc_file(
+    filepath: str,
+    data_vars: Union[str, List] = 'all',
+) -> xr.Dataset:
+    """ Read archival NDBC netCDF file as an xarray dataset.
+
+    Archival data are available at:
+    https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.nodc:NDBC-CMANWx
+
+    Args:
+        filepath (str): Path to NDBC .nc file.
+
+    Returns:
+        xr.Dataset: NDBC data.
+    """
+    # Opening some NDBC datasets may raise an exception due to a
+    # conflict with `wave_frequency_bounds`.
+    try:
+        ndbc_ds = xr.open_dataset(filepath)
+    except MissingDimensionsError as error:
+        ndbc_ds = xr.open_dataset(filepath, drop_variables='wave_frequency_bounds')
+        print(error)
+
+    if data_vars != 'all':
+        ndbc_ds = ndbc_ds[data_vars]
+    return ndbc_ds
+
+
+def read_ndbc_met_file(filepath: str) -> pd.DataFrame:
+    """ Read NDBC standard meteorological data into a DataFrame.
+
+    Args:
+        filepath (str): Path to NDBC standard meteorological data files.
+
+    Returns:
+        DataFrame: NDBC meteorological data.
+    """
+    datetime_name_mapping = {
+        'YY': 'year',
+        'MM': 'month',
+        'DD': 'day',
+        'hh': 'hour',
+        'mm': 'minute',
+    }
+    # Read column names from the first row and strip comment characters.
+    column_names = pd.read_csv(filepath, sep=r'\s+', nrows=0).columns.tolist()
+    column_names = [name.strip('#') for name in column_names]
+
+    # Read data rows into a DataFrame.
+    ndbc_df = pd.read_csv(filepath,
+                          sep=r'\s+',
+                          names=column_names,
+                          skiprows=2)
+
+    # Rename and assign datetime columns as a datetime index.
+    ndbc_df_renamed = ndbc_df.rename(columns=datetime_name_mapping)
+    ndbc_df_renamed['datetime'] = pd.to_datetime(
+        ndbc_df_renamed[datetime_name_mapping.values()],
+        utc=True,
+    )
+    return (ndbc_df_renamed
+            .drop(columns=datetime_name_mapping.values())
+            .set_index('datetime'))
+
+
 # TODO: update:
 def _resample_met_vars(
     met_ds: xr.Dataset,
@@ -526,45 +595,3 @@ def _attrs_to_datetime(variable_attrs, key, **kwargs) -> List:
     attrs_as_datetimes = pd.to_datetime(all_attrs, **kwargs)
     return list(attrs_as_datetimes.sort_values())
 
-
-# def merge_met_vars(
-#     wsra_ds: xr.Dataset,
-#     met_ds: xr.Dataset,
-#     data_vars: List,
-#     resample_method: Callable = np.nanmean,
-#     rename_dict: Union[dict, None] = None,
-#     **merge_kwargs,
-# ) -> xr.Dataset:
-#     """ Merge met data variables into a WSRA Dataset.
-
-#     Prior to merging, met data are resampled from their original frequency of
-#     1 Hz onto the WSRA frequency of 0.02 Hz (50 s) using `resample_method`. For
-#     example, if `resample_method = np.nanmean`, the preceeding and proceeding
-#     25 s, offset from each WSRA observation time, of met data in `data_vars`
-#     are averaged.
-
-#     Args:
-#         wsra_ds (xr.Dataset): WSRA dataset.
-#         met_ds (xr.Dataset): P-3 met dataset.
-#         data_vars (List): Variable names from `met_ds` to resample and merge
-#             into `met_ds`.
-#         resample_method (Callable, optional): Method used to resample
-#             `data_vars` every 50 s. Defaults to np.nanmean.
-#         rename_dict (dict, optional): Dictionary of current met variable names
-#             as keys with desired names as values. Passed to Dataset.rename().
-#         merge_kwargs (optional): additional keyword arguments are passed
-#             to the xarray.Dataset.merge method.
-
-#     Returns:
-#         xr.Dataset: Original WSRA dataset with met variables merged in.
-#     """
-#     wsra_times = wsra_ds['time'].sel(time=slice(met_ds['Time'][0],
-#                                                 met_ds['Time'][-1]))
-#     met_resampled_ds = _resample_met_vars(met_ds,
-#                                           data_vars,
-#                                           wsra_times.values,
-#                                           resample_method)
-#     if rename_dict:
-#         met_resampled_ds = met_resampled_ds.rename(rename_dict)
-
-#     return wsra_ds.merge(met_resampled_ds, **merge_kwargs)
