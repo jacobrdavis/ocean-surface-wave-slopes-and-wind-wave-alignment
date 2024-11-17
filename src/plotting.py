@@ -26,6 +26,7 @@ from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from matplotlib.patches import FancyArrow, Arc
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
+from src import utilities
 
 # Default drifter colors and labels
 default_drifter_colors = {
@@ -184,6 +185,12 @@ def get_drifter_label(drifter_type: str) -> str:
 figure_full_width = 5.5
 normal_font_size = 10
 small_font_size = 8
+default_gridline_kwargs = dict(
+    color='k',
+    alpha=0.075,
+    linestyle='-',
+    linewidth=0.5,
+)
 
 
 def configure_figures():
@@ -222,6 +229,12 @@ def create_inset_colorbar(plot_handle, ax, bounds=None, **kwargs):
     cax = ax.inset_axes(bounds, axes_class=Axes)
     cbar = plt.colorbar(plot_handle, cax=cax, **kwargs)
     return cbar, cax
+
+
+def set_gridlines(ax, **kwargs):
+    """ Set axis gridlines. """
+    grid_kwargs = _set_kwarg_defaults(default_gridline_kwargs, kwargs)
+    ax.grid(**grid_kwargs)
 
 
 def remove_top_and_right_spines(ax):
@@ -521,7 +534,7 @@ def plot_drifter_storm_frame(
 
     if normalize_by_rmw:
         rmw_nmi = drifter_df_plot['storm_radius_max_wind_nmi']
-        rmw_km = rmw_nmi * 1.852
+        rmw_km = utilities.nmi_to_km(rmw_nmi)
         storm_distance_x = storm_distance_x / rmw_km
         storm_distance_y = storm_distance_y / rmw_km
 
@@ -579,7 +592,7 @@ default_ocean_kwargs = {'color': 'white'}
 default_land_kwargs = {'color': 'whitesmoke', 'zorder': 3, 'alpha': 0.4}
 default_coast_kwargs = {'edgecolor': 'grey', 'linewidth': 0.5, 'zorder': 4}
 default_intensity_cmap = mpl.cm.get_cmap('YlOrRd', 7)
-default_gridline_kwargs = dict(
+default_map_gridline_kwargs = dict(
     draw_labels=True,
     dms=False,
     x_inline=False,
@@ -597,14 +610,14 @@ def plot_base_chart(
     ocean_kwargs=default_ocean_kwargs,
     land_kwargs=default_land_kwargs,
     coast_kwargs=default_coast_kwargs,
-    gridline_kwargs=default_gridline_kwargs,
+    gridline_kwargs=default_map_gridline_kwargs,
 ):
     """ Plot a base map features (ocean, land, coast, grid). """
     # Set remaining kwargs to defaults
     ocean_kwargs = _set_kwarg_defaults(default_ocean_kwargs, ocean_kwargs)
     land_kwargs = _set_kwarg_defaults(default_land_kwargs, land_kwargs)
     coast_kwargs = _set_kwarg_defaults(default_coast_kwargs, coast_kwargs)
-    gridline_kwargs = _set_kwarg_defaults(default_gridline_kwargs, gridline_kwargs)
+    gridline_kwargs = _set_kwarg_defaults(default_map_gridline_kwargs, gridline_kwargs)
 
     # Initialize the figure, crop it based on extent, and add gridlines
     ax.set_extent(extent)
