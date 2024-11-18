@@ -19,9 +19,8 @@ def wind_direction(u_component: np.ndarray, v_component: np.ndarray):
     Returns:
         np.ndarray: wind direction in meterological convention (+ CW, 0 deg N)
     """
-
-    direction_trig = np.arctan2(u_component, v_component)
-    return np.mod(180 + np.rad2deg(direction_trig), 360)
+    direction_from_north_going_to = np.arctan2(u_component, v_component)
+    return np.mod(180 + np.rad2deg(direction_from_north_going_to), 360)
 
 
 def match_model_and_buoy_by_interpolation(

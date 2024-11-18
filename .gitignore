@@ -1,4 +1,5 @@
 # Project-specific
+working_figures/*
 input_data/*
 cached_data/*
 archived_data/*

@@ -159,11 +159,11 @@ def stokes_drift(
     stokes_drift_per_frequency = (2 * angular_frequency * wavenumber
                                     * energy_density * hyp_ratio)
 
-    # Negative sign on a1, b1 converts to "going to" convention.
-    stokes_drift_east = np.trapz(stokes_drift_per_frequency * -a1,
+    # Negative sign on a1, b1 converts convention.
+    stokes_drift_east = np.trapz(stokes_drift_per_frequency * a1,
                                  x=frequency,
                                  axis=-1)
-    stokes_drift_north = np.trapz(stokes_drift_per_frequency * -b1,
+    stokes_drift_north = np.trapz(stokes_drift_per_frequency * b1,
                                   x=frequency,
                                   axis=-1)
     return stokes_drift_east, stokes_drift_north
