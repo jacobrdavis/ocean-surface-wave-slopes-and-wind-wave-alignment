@@ -364,6 +364,50 @@ class BuoyDataFrameAccessor:
             )
         return wavenumber_mean_square_slope
 
+    def stokes_drift(
+        self,
+        z_elevation: float = 0,
+        energy_density_col: Optional[str] = None,
+        frequency_col: Optional[str] = None,
+        wavenumber_col: Optional[str] = None,
+        depth_col: Optional[str] = None,
+        a1_col: Optional[str] = None,
+        b1_col: Optional[str] = None,
+        **kwargs
+    ) -> pd.DataFrame:   # TODO: df?
+        """ Return stokes drift components as a DataFrame. """
+        if energy_density_col is None:
+            energy_density_col = self.vars.energy_density
+        if frequency_col is None:
+            frequency_col = self.vars.frequency
+        if wavenumber_col is None:
+            wavenumber_col = self.vars.wavenumber
+        if depth_col is None:
+            depth_col = self.vars.depth
+        if a1_col is None:
+            a1_col = self.vars.a1
+        if b1_col is None:
+            b1_col = self.vars.b1
+
+        stokes_drift_components = self._obj.apply(
+                lambda df: waves.stokes_drift(
+                    energy_density=df[energy_density_col],
+                    frequency=df[frequency_col],
+                    a1=df[a1_col],
+                    b1=df[b1_col],
+                    z_elevation=z_elevation,
+                    depth=np.array([df[depth_col]]),
+                    wavenumber=df[wavenumber_col],
+                    **kwargs,
+                ),
+                axis=1,
+                result_type='expand',
+                #TODO: raw = True?
+            )
+        # Return DataFrame of east and north components. Cast values to
+        # floats (each row is originally an ndarray).
+        return stokes_drift_components.astype(float)
+
     def energy_period(
         self,
         energy_density_col: Optional[str] = None,
