@@ -126,7 +126,7 @@ pressure_plot_kwargs = {
 }
 mean_square_slope_plot_kwargs = {
     'cmap': colorcet.cm.dimgray_r,
-    'norm': mpl.colors.Normalize(vmin=0.010, vmax=0.020),
+    'norm': mpl.colors.Normalize(vmin=0.010, vmax=0.022),
 }
 mean_square_slope_residual_plot_kwargs = {
     'cmap': cmocean.cm.balance,
