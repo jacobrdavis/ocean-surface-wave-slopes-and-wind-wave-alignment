@@ -41,9 +41,7 @@ def mean_square_slope(
         float: if the shape of `energy_density` is (f,).
         np.ndarray: if the shape of `energy_density` is (..., f).
     """
-    energy_density = np.asarray(energy_density)
-    frequency = np.asarray(frequency)
-
+    #TODO: use _mask_spectra function
     if min_frequency is None:
         min_frequency = frequency.min()
 
@@ -91,9 +89,6 @@ def wavenumber_mean_square_slope(
         float: if the shape of `energy_density` is (k,).
         np.ndarray: if the shape of `energy_density` is (..., k).
     """
-    energy_density_wn = np.asarray(energy_density_wn)
-    wavenumber = np.asarray(wavenumber)
-
     if min_wavenumber is None:
         min_wavenumber = wavenumber.min()
 
@@ -108,6 +103,70 @@ def wavenumber_mean_square_slope(
 
     # Calculate the second moment of the energy density wavenumber spectrum.
     return np.trapz(y=energy_density_wn * wavenumber**2, x=wavenumber, axis=-1)
+
+
+def stokes_drift(
+    energy_density: np.ndarray,
+    frequency: np.ndarray,
+    a1: np.ndarray,
+    b1: np.ndarray,
+    z_elevation: float = 0.0,
+    depth: Optional[np.ndarray] = None,
+    wavenumber: Optional[np.ndarray] = None,
+    min_frequency: Optional[float] = None,
+    max_frequency: Optional[float] = None,
+) -> Tuple[np.ndarray, np.ndarray]:
+    """
+
+    z_elevation is defined positive up (i.e., z = 0 at surface, z = -1 at 1-m below surface)
+    Depth is water depth and is positive
+
+    energy_density shape (..., f)  (..., d, f)?
+    frequency shape (f,)
+    a1 shape (..., f)
+    b1 shape (..., f)
+    depth shape (..., d)
+    wavenumber: (f,)
+
+    """
+    # Keep a copy of the unmasked frequency for later spectral masking.
+    frequency_unmasked = frequency.copy()
+    mask_args = (frequency_unmasked, min_frequency, max_frequency)
+    energy_density, frequency = _mask_spectra(energy_density, *mask_args)
+    a1, _ = _mask_spectra(a1,  *mask_args)
+    b1, _ = _mask_spectra(b1,  *mask_args)
+
+    angular_frequency = frequency_to_angular_frequency(frequency)
+
+    # `inverse_dispersion_array` expects depth as an array.
+    if depth is None:
+        depth = np.array([np.inf])
+
+    # If wavenumber is not already provided, calculate it using the
+    # dispersion relationship. Otherwise, mask the provided wavenumbers.
+    if wavenumber is None:
+        wavenumber = inverse_dispersion_array(frequency, depth)
+    else:
+        wavenumber, _ = _mask_spectra(wavenumber,  *mask_args)
+
+    # Calculate hyperbolic terms.  Depth is broadcast with a trailing
+    # frequency dimension.
+    hyp_num = np.cosh(2 * wavenumber * (z_elevation + depth[..., None]))
+    hyp_den = 2 * np.sinh(wavenumber * depth[..., None])**2
+    hyp_ratio = hyp_num / hyp_den
+
+    # Calculate stokes drift integrand.
+    stokes_drift_per_frequency = (2 * angular_frequency * wavenumber
+                                    * energy_density * hyp_ratio)
+
+    # Negative sign on a1, b1 converts to "going to" convention.
+    stokes_drift_east = np.trapz(stokes_drift_per_frequency * -a1,
+                                 x=frequency,
+                                 axis=-1)
+    stokes_drift_north = np.trapz(stokes_drift_per_frequency * -b1,
+                                  x=frequency,
+                                  axis=-1)
+    return stokes_drift_east, stokes_drift_north
 
 
 def energy_period(
@@ -419,7 +478,7 @@ def fq_energy_to_wn_energy(
     if np.isscalar(depth):
         depth = np.array([depth])
 
-    wavenumber = inverse_dispersion(frequency, depth).squeeze()
+    wavenumber = inverse_dispersion(frequency, depth).squeeze()  #TODO: array?
     dw_dk = intrinsic_group_velocity(wavenumber, frequency, depth)
     df_dw = 1 / (2*np.pi)
     energy_density_wn = energy_density_fq * df_dw * dw_dk
@@ -851,3 +910,49 @@ def depth_regime(kh: np.ndarray) -> Tuple:
 def frequency_to_angular_frequency(frequency):
     """Helper function to convert frequency (f) to angular frequency (omega)"""
     return 2 * np.pi * frequency
+
+
+# TODO: name implies mask with NaN, but values are dropped
+def _mask_spectra(
+    spectra: np.ndarray,
+    coordinate: np.ndarray,
+    min_coordinate: Optional[float] = None,
+    max_coordinate: Optional[float] = None,
+) -> Tuple[np.ndarray, np.ndarray]:
+    """ Return 1D spectra between a min and max coordinate.
+
+    Note: For input spectra with shape `(..., f)` and coordinate with
+    shape (f), values where `coordinate` is outside the closed interval
+    [`min_coordinate`, `max_coordinate`] are dropped such that output
+    has shape `(..., f')` and (f'), respectively, where `f'` is the
+    length of the coordinate inside the interval.  The `f` axis must be
+    the last axis of `spectra`.
+
+    Args:
+        spectra (np.ndarray): spectra with shape (..., f).
+        coordinate (np.ndarray): spectral coordinate (e.g., frequency
+            or wavenumber) with shape  (f).
+        min_coordinate (Optional[float], optional): maximum coordinate
+            value to mask. Defaults to None.
+        max_coordinate (Optional[float], optional): minimum coordinate
+            value to mask. Defaults to None.
+
+    Returns:
+        _type_: spectra and coordinate between min_coordinate and
+            max_coordinate with shapes (..., f') and (f'), respectively.
+    """
+    # If a coordinate has ndim > 1, the masked spectra will be flattened
+    # (since the result might be ragged) which could result in
+    # unexpected behavior when passed to other functions.
+    if coordinate.ndim > 1:
+        raise ValueError('Spectral `coordinate` must be 1-dimensional.')
+    if min_coordinate is None:
+        min_coordinate = coordinate.min()
+    if max_coordinate is None:
+        max_coordinate = coordinate.max()
+
+    # Mask spectra and coordinate outside of the specified range.
+    coordinate_mask = np.logical_and(coordinate >= min_coordinate,
+                                     coordinate <= max_coordinate)
+
+    return spectra[..., coordinate_mask], coordinate[coordinate_mask]
