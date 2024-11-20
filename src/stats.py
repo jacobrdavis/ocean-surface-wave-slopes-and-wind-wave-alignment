@@ -49,14 +49,12 @@ def parameter_confidence_intervals(popt, pcov, n, alpha=0.05):
     return perr, t_value, popt_upper, popt_lower
 
 
-def print_fit_parameters(fit_dict, parameter_names=None, print_format='.5f'):
-    #TODO: Add docstring
+def print_fit_parameters(fit_dict, print_format='.5f'):
+    # TODO: Add docstring
     for i, p in enumerate(fit_dict['popt']):
-        if parameter_names is None:
-            name = f'p{i}'
-        else:
-            name = parameter_names[i]
-        print(f'{name}: {p:{print_format}} +/- {fit_dict['t_value']*fit_dict["perr"][i]:{print_format}}')
+        name = fit_dict['vars'][i]
+        print(f"{name}: {p:{print_format}} "
+              f"+/- {fit_dict['t_value']*fit_dict['perr'][i]:{print_format}}")
 
 
 def binned_statistic_df(df, x, y, stat='mean', bin_width=5, min_bin=None, max_bin=None, bins=None):
