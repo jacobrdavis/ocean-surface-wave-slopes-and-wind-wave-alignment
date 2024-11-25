@@ -75,6 +75,7 @@ time.standard_name='time'
 time.long_name='time'
 time.description='mean observation time within reporting interval'
 time.units='seconds since 1970-01-01T00:00:00Z'
+time.calendar='proleptic_gregorian'
 time.coverage_content_type='coordinate'
 
 longitude.standard_name='longitude'
