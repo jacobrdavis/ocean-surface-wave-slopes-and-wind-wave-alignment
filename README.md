@@ -6,7 +6,7 @@ J. Davis, J. Thomson, I. Houghton, C. Fairall, B. Butterworth, E. Thompson, G. d
 
 <figure>
    <img src="./publication_figures/fig-alignment_categories_and_mss.png" width="576" alt="Wind-wave alignment categories in the storm-following reference frame and buoy mean square slope versus COAMPS-TC 10-m wind speed, classified by wind-wave alignment.">
-   <figcaption><em>Left</em>: Wind-wave alignment categories in the storm-following reference frame; <em>Right</em>: Buoy mean square slope versus COAMPS-TC 10-m wind speed, classified by wind-wave alignment using an energy-weighted wave direction. </figcaption>
+   <figcaption><em>Left</em>: Wind-wave alignment categories in a storm-following reference frame; <em>Right</em>: Buoy mean square slope versus COAMPS-TC 10-m wind speed, classified by wind-wave alignment using an energy-weighted wave direction. </figcaption>
 </figure>
 
 ## Abstract
