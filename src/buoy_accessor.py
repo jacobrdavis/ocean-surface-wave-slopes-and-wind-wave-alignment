@@ -160,8 +160,12 @@ class BuoyDataFrameAccessor:
             xarray.to_netcdf().
 
         See also:
-        https://cfconventions.org/Data/cf-conventions/cf-conventions-1.11/cf-conventions.html#_single_trajectory
-
+            CF conventions: https://cfconventions.org/Data/cf-conventions/cf-conventions-1.11/cf-conventions.html#_single_trajectory
+            CF Standard Name Table: https://cfconventions.org/Data/cf-standard-names/current/build/cf-standard-name-table.html
+            ACDD-1.3: https://wiki.esipfed.org/Attribute_Convention_for_Data_Discovery_1-3
+            CF compliance checkers and other software: https://cfconventions.org/software.html
+            Tutorial by hevgyrt: https://gist.github.com/hevgyrt/9f6fa87805d98cf78e25e7718ae23f6b
+            Met Norway data management handbook: https://metno.github.io/data-management-handbook/
         Args:
             buoy_id (str): The buoy ID to save as a netCDF file.  If the
                 DataFrame is multiindexed by id, this should be a valid index.
