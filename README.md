@@ -4,8 +4,8 @@
 
 J. Davis, J. Thomson, I. Houghton, C. Fairall, B. Butterworth, E. Thompson, G. de Boer, J. Doyle, and J. Moskaitis (2024) "Ocean surface wave slopes and wind-wave alignment observed in Hurricane Idalia" submitted to JGR Oceans.
 
-<figure align="center">
-   <img src="./publication_figures/fig-alignment_categories_and_mss.png" width="576" alt="Wind-wave alignment categories in the storm-following reference frame and buoy mean square slope versus COAMPS-TC 10-m wind speed, classified by wind-wave alignment.">
+<figure>
+   <img src="./publication_figures/fig-alignment_categories_and_mss.png" width="576" align="center" alt="Wind-wave alignment categories in the storm-following reference frame and buoy mean square slope versus COAMPS-TC 10-m wind speed, classified by wind-wave alignment.">
    <figcaption><em>Left</em>: Wind-wave alignment categories in the storm-following reference frame; <em>Right</em>: Buoy mean square slope versus COAMPS-TC 10-m wind speed, classified by wind-wave alignment using an energy-weighted wave direction. </figcaption>
 </figure>
 
