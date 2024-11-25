@@ -5,13 +5,11 @@
 J. Davis, J. Thomson, I. Houghton, C. Fairall, B. Butterworth, E. Thompson, G. de Boer, J. Doyle, and J. Moskaitis (2024) "Ocean surface wave slopes and wind-wave alignment observed in Hurricane Idalia" submitted to JGR Oceans.
 
 ## Abstract
-
 Drifting buoy observations in Hurricane Idalia (2023) are used to investigate the dependence of ocean surface wave mean square slope on wind, wave, and storm characteristics.
 Mean square slope has a primary dependence on wind speed that is linear at low-to-moderate wind speeds and approaches saturation at high wind speeds ($>$ 20 m/s).
 Inside Hurricane Idalia, buoy-measured mean square slopes have a secondary dependence on wind-wave alignment:
 at a given wind speed, slopes are higher where wind and waves are aligned compared to where wind and waves are crossing.
-At moderate wind speeds, differences in mean square slope between aligned and crossing conditions can vary 10\% to 15\% relative to their mean.
-The dependence on wind-wave alignment is robust up to 30 m/s, but can be obscured at the highest wind speeds near the center of the storm where wind and wave directions change rapidly. 
+At moderate wind speeds, differences in mean square slope between aligned and crossing conditions can vary 15\% to 20\% relative to their mean.
 These changes in wave slopes may be related to the reported dependence of air-sea drag coefficients on wind-wave alignment.
 
 ### Plain Language Summary
