@@ -1,7 +1,7 @@
 # Define dataset paths
 [dir]
 idalia_drifter_data = "input_data/hurricane_idalia_drifter_data_v3.pickle"
-coamps = "input_data/coamps_idalia_reanalysis.nc"
+coamps = "input_data/coamps_idalia_reforecast.nc"
 best_track = "input_data/al102023_best_track/"
 ibtracs = "input_data/ibtracs.last3years.list.v04r01.csv"
 gebco = "input_data/gebco_2023_n31.0_s25.0_w-87.0_e-81.0.nc"
