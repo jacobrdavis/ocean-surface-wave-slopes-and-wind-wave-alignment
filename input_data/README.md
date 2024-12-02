@@ -9,7 +9,7 @@ To run this repository, the following files are required:
 Spotter and MicroSWIFT drifter (buoy) data in Hurricane Idalia from 2023-08-28 to 2023-08-31.
 
 This file should be downloaded and saved locally in this folder (`input_data/`) and the path should be stored in config.toml as `idalia_drifter_data`.
-Available on the Dryad repository for this publication (https://doi.org/10.5061/dryad.zw3r228h7).
+Available as supplemental files/information in the Dryad repository for this publication (https://doi.org/10.5061/dryad.zw3r228h7).
 
 ## COAMPS-TC data
 
@@ -18,7 +18,7 @@ Available on the Dryad repository for this publication (https://doi.org/10.5061/
 COAMPS-TC "reforecast" wind and pressure fields for Hurricane Idalia from 2023-08-29 to 2023-08-31.  Originally accessed from MetGet on 1 November 2024 at 1600 PT.
 
 This file should be downloaded and saved locally in this folder (`input_data/`) and the path should be stored in config.toml as `coamps`.
-Available on the Dryad repository for this publication (https://doi.org/10.5061/dryad.zw3r228h7).
+Available as supplemental files/information in the Dryad repository for this publication (https://doi.org/10.5061/dryad.zw3r228h7).
 
 ## NHC best track shape files
 
@@ -35,7 +35,7 @@ These data were originally accessed from https://www.nhc.noaa.gov/data/tcr/index
 These data are used in accordance with the NOAA/NWS Data and Products disclaimer at: https://www.weather.gov/disclaimer/.
 
 This folder (and all of its files) should be downloaded and saved locally in this folder (`input_data/`) and the path should be stored in config.toml as `best_track`.
-Available on the Dryad repository for this publication (https://doi.org/10.5061/dryad.zw3r228h7).
+Available as supplemental files/information in the Dryad repository for this publication (https://doi.org/10.5061/dryad.zw3r228h7).
 
 ## IBTrACS
 
@@ -45,7 +45,7 @@ International Best Track Archive for Climate Stewardship (IBTrACS) tabular data 
 Terms of use are described under the "Support" tab at: https://www.ncei.noaa.gov/products/international-best-track-archive.
 
 This file should be downloaded and saved locally in this folder (`input_data/`) and the path should be stored in config.toml as `ibtracs`.
-Available on the Dryad repository for this publication (https://doi.org/10.5061/dryad.zw3r228h7).
+Available as supplemental files/information in the Dryad repository for this publication (https://doi.org/10.5061/dryad.zw3r228h7).
 
 ## GEBCO
 
@@ -55,7 +55,7 @@ Gridded bathymetry data from the General Bathymetric Chart of the Oceans (GEBCO)
 Terms of use are described under the "Terms of use and disclaimer" header at: https://www.gebco.net/data_and_products/gridded_bathymetry_data/gebco_2023/.
 
 This file should be downloaded and saved locally in this folder (`input_data/`) and the path should be stored in config.toml as `gebco`.
-Available on the Dryad repository for this publication (https://doi.org/10.5061/dryad.zw3r228h7).
+Available as supplemental files/information in the Dryad repository for this publication (https://doi.org/10.5061/dryad.zw3r228h7).
 
 ## Ian drifter data
 
@@ -88,7 +88,7 @@ These data were originally accessed from https://www.aoml.noaa.gov/2023-hurrican
 These data are used in accordance with the NOAA/NWS Data and Products disclaimer at: https://www.weather.gov/disclaimer/.
 
 This folder (and all of its files) should be downloaded and saved locally in this folder (`input_data/`) and the path should be stored in config.toml as `noaa_met_data`.
-Available on the Dryad repository for this publication (https://doi.org/10.5061/dryad.zw3r228h7).
+Available as supplemental files/information in the Dryad repository for this publication (https://doi.org/10.5061/dryad.zw3r228h7).
 
 ## USAFR SFMR data
 
@@ -103,7 +103,7 @@ These data were originally accessed from https://www.aoml.noaa.gov/2023-hurrican
 These data are used in accordance with the NOAA/NWS Data and Products disclaimer at: https://www.weather.gov/disclaimer/.
 
 This folder (and all of its files) should be downloaded and saved locally in this folder (`input_data/`) and the path should be stored in config.toml as `usafr_met_data`.
-Available on the Dryad repository for this publication (https://doi.org/10.5061/dryad.zw3r228h7).
+Available as supplemental files/information in the Dryad repository for this publication (https://doi.org/10.5061/dryad.zw3r228h7).
 
 ## NDBC data
 
@@ -113,4 +113,4 @@ National Data Buoy Center Station 42036 (West Tampa) data for the month of 2023-
 These data are used in accordance with the NOAA/NWS Data and Products disclaimer at: https://www.weather.gov/disclaimer/ and  "Use Limitations" under the "Description" tab at: https://www.ncei.noaa.gov/archive/accession/NDBC-CMANWx.
 
 This file should be downloaded and saved locally in this folder (`input_data/`) and the path should be stored in config.toml as `ndbc_data`.
-Available on the Dryad repository for this publication (https://doi.org/10.5061/dryad.zw3r228h7).
+Available as supplemental files/information in the Dryad repository for this publication (https://doi.org/10.5061/dryad.zw3r228h7).

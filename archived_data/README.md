@@ -20,9 +20,9 @@ This data was collected as part of the NOPP Hurricane Coastal Impacts (NHCI) pro
 
 Output data files are in netCDF format (.nc) and follow the Climate and Forecast (CF) Metadata Conventions 1.11 (CF-1.11) and Attribute Convention for Data Discovery 1-3 (ACDD-1.3).  Variable attributes describe the standard name, long name, description, units, and coverage content type of each variable.  Where applicable, standard names are from the CF Standard Name Table Version 85 (21 May 2024), otherwise this attribute is left empty.  Null floating point values are indicated by NaN and null strings are indicated by an empty string.  Data for each buoy type (microSWIFT or Spotter) are organized as single trajectory data indexed by observation time.  Each netCDF file is named according to the buoy type and ID as: "hurricane_idalia_{`buoy_type`}_{`buoy_id`}.nc".
 
-Input data, required to run the notebooks in the code repository (accessible via GitHub, see next section), are provided in an `input_data.zip` file.  These files **are not recommended for use** **outside the notebooks** (the output files above are quality controlled, adjusted for the Doppler shift, contain more variables, and are self-documenting).
+Input data, required to run the notebooks in the code repository (accessible via GitHub, see next section), are provided in an `input_data.zip` file as Supplemental Files.  These files **are not recommended for use** **outside the notebooks** (the output files above are quality controlled, adjusted for the Doppler shift, contain more variables, and are self-documenting).
 
-The input data zip folder contains the following files:
+The supplemental input data  folder contains the following files:
 
 * `hurricane_idalia_drifter_data_v3.pickle` - Original Spotter and MicroSWIFT drifter (buoy) data in Hurricane Idalia from 2023-08-28 to 2023-08-31.
 * `coamps_idalia_reforecast.nc` - COAMPS-TC "reforecast" wind and pressure fields for Hurricane Idalia from 2023-08-29 to 2023-08-31. Originally accessed from MetGet on 1 November 2024.
@@ -33,7 +33,7 @@ The input data zip folder contains the following files:
 * `usafr_met_data/20230829U1.01.txt`, `usafr_met_data/20230830U1.01.txt`, `usafr_met_data/20230831U1.01.txt` - United States Air Force Reserve 53rd WRS Stepped Frequency Microwave Radiometer data collected in Hurricane Idalia 2023-08-29 to 2023-08-31. These data were originally accessed from [https://www.aoml.noaa.gov/2023-hurricane-field-program-data/](https://www.aoml.noaa.gov/2023-hurricane-field-program-data/) on 28 October 2024. These data are used in accordance with the NOAA/NWS Data and Products disclaimer at: [https://www.weather.gov/disclaimer/](https://www.weather.gov/disclaimer/).
 * `NDBC_42036_202308_D7_v00.nc` - National Data Buoy Center Station 42036 (West Tampa) data for the month of 2023-08. These data were originally accessed from [https://www.ncei.noaa.gov/archive/accession/NDBC-CMANWx](https://www.ncei.noaa.gov/archive/accession/NDBC-CMANWx) on 13 November 2023.  These data are used in accordance with the NOAA/NWS Data and Products disclaimer at: [https://www.weather.gov/disclaimer/](https://www.weather.gov/disclaimer/) and  "Use Limitations" under the "Description" tab at: [https://www.ncei.noaa.gov/archive/accession/NDBC-CMANWx](https://www.ncei.noaa.gov/archive/accession/NDBC-CMANWx). (See citation under **Access information** below.)
 
-  Additional input file documentation is provided in `input_file/documentation/`.
+  Additional input file documentation is provided in `input_data/documentation/`.
 
 ## Code/software
 
@@ -53,3 +53,4 @@ Supporting data was derived from the following sources:
 * Best track data: Gahtan, Jennifer; Knapp, Kenneth R.; Schreck, Carl J. III; Diamond, Howard J.; Kossin, James P.; Kruk, Michael C. (2024). International Best Track Archive for Climate Stewardship (IBTrACS) Project, Version 4.01. [last 3 years]. NOAA National Centers for Environmental Information. [https://doi.org/10.25921/82ty-9e16](https://doi.org/10.25921/82ty-9e16). Accessed 7 November 2024.
 * Bathymetry data:  GEBCO Bathymetric Compilation Group. (2023). The GEBCO_2023 grid - a continuous terrain model of the global oceans and land. NERC EDS British Oceanographic Data Centre NOC. doi:10.5285/f98b053b-0cbc-6c23-e053-6c86abc0af7b. Accessed November 28, 2023.
 * NDBC data: NOAA National Data Buoy Center (1971). Meteorological and oceanographic data collected from the National Data Buoy Center Coastal-Marine Automated Network (C-MAN) and moored (weather) buoys. [Station 42036 (LLNR 855)1028 - WEST TAMPA]. NOAA National Centers for Environmental Information. Dataset. [https://www.ncei.noaa.gov/archive/accession/NDBC-CMANWx](https://www.ncei.noaa.gov/archive/accession/NDBC-CMANWx). Accessed 13 November 2023.
+
