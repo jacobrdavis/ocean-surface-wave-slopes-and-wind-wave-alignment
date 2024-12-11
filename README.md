@@ -4,11 +4,6 @@
 
 J. Davis, J. Thomson, I. Houghton, C. Fairall, B. Butterworth, E. Thompson, G. de Boer, J. Doyle, and J. Moskaitis (2024) "Ocean surface wave slopes and wind-wave alignment observed in Hurricane Idalia" submitted to JGR Oceans.
 
-<figure>
-   <img src="./publication_figures/fig-alignment_categories_and_mss.png" width="576" alt="Wind-wave alignment categories in the storm-following reference frame and buoy mean square slope versus COAMPS-TC 10-m wind speed, classified by wind-wave alignment.">
-   <figcaption><em>Left</em>: Wind-wave alignment categories in a storm-following reference frame; <em>Right</em>: Buoy mean square slope versus COAMPS-TC 10-m wind speed, classified by wind-wave alignment using an energy-weighted wave direction. </figcaption>
-</figure>
-
 ## Abstract
 Drifting buoy observations in Hurricane Idalia (2023) are used to investigate the dependence of ocean surface wave mean square slope on wind, wave, and storm characteristics.
 Mean square slope has a primary dependence on wind speed that is linear at low-to-moderate wind speeds and approaches saturation at high wind speeds ($>$ 20 m/s).
@@ -24,6 +19,11 @@ At a given wind speed, buoy data from  Hurricane Idalia reveal a dependence of s
 Slopes are elevated when the wind blows in the same direction the waves travel and are reduced when the wind blows roughly perpendicular to the waves.
 Wave slope, particularly of the shorter waves, is related to the roughness of the ocean surface, which is critical to modeling wind surface forcing (or ``drag'') in hurricanes.
 Understanding variations in slope within hurricanes thus helps to inform the prediction models used for hurricane intensity and coastal flooding forecasts. 
+
+<figure>
+   <img src="./publication_figures/fig-alignment_categories_and_mss.png" width="576" alt="Wind-wave alignment categories in the storm-following reference frame and buoy mean square slope versus COAMPS-TC 10-m wind speed, classified by wind-wave alignment.">
+   <figcaption><em>Left</em>: Wind-wave alignment categories in a storm-following reference frame; <em>Right</em>: Buoy mean square slope versus COAMPS-TC 10-m wind speed, classified by wind-wave alignment using an energy-weighted wave direction. </figcaption>
+</figure>
 
 ## Data
 
