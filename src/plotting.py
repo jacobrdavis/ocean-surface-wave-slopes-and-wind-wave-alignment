@@ -271,6 +271,7 @@ def label_subplot(
     loc='upper left',
     nudge_x=0,
     nudge_y=0,
+    **kwargs,
 ):
     """ Add text to subplot in the specified location. """
     if loc == 'upper left':
@@ -289,6 +290,7 @@ def label_subplot(
         ha=ha,
         va=va,
         fontsize=fontsize,
+        **kwargs,
     )
 
 
