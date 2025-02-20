@@ -2,7 +2,7 @@
 
 # Code for:
 
-J. Davis, J. Thomson, I. Houghton, C. Fairall, B. Butterworth, E. Thompson, G. de Boer, J. Doyle, and J. Moskaitis (2025) "Ocean surface wave slopes and wind-wave alignment observed in Hurricane Idalia" submitted to JGR Oceans.
+Davis, J. R., Thomson, J., Houghton, I. A., Fairall, C. W., Butterworth, B. J., Thompson, E. J., et al. (2025). Ocean surface wave slopes and wind-wave alignment observed in Hurricane Idalia. Journal of Geophysical Research: Oceans, 130, e2024JC021814. https://doi.org/10.1029/2024JC021814
 
 ## Abstract
 Drifting buoy observations in Hurricane Idalia (2023) are used to investigate the dependence of ocean surface wave mean square slope on wind, wave, and storm characteristics.
