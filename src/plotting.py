@@ -244,7 +244,7 @@ def remove_top_and_right_spines(ax):
 
 def get_empty_legend_placeholder() -> Line2D:
     """ Return an empty legend placeholder. """
-    return mpl.lines.Line2D([], [], color="none")
+    return mpl.lines.Line2D([], [], color="none", label="none")
 
 
 # Subplot functions and classes
